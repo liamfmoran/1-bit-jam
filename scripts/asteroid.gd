@@ -5,7 +5,7 @@ var break_impulse_threshold: float = 400.0
 var min_break_size: float = 15.0
 
 var _viewport_size: Vector2
-var _margin: float = 200.0
+var _margin: float = 600.0
 var _broken := false
 
 const ASTEROID_SCENE := preload("res://scenes/asteroid.tscn")
@@ -34,9 +34,12 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	var pos := global_position
-	if pos.x < -_margin or pos.x > _viewport_size.x + _margin \
-			or pos.y < -_margin or pos.y > _viewport_size.y + _margin:
+	var camera := get_viewport().get_camera_2d()
+	if not camera:
+		return
+	var cam_pos := camera.global_position
+	var dist := global_position.distance_to(cam_pos)
+	if dist > _margin + _viewport_size.x:
 		queue_free()
 
 

@@ -9,7 +9,11 @@ extends RigidBody2D
 @export var linear_damp_value: float = 0.5
 @export var angular_damp_value: float = 3.0
 @export var lateral_friction: float = 15.0
-@export var trailer_count: int = 3
+@export var camera_zoom_min: float = 1.0
+@export var camera_zoom_max: float = 0.7
+@export var camera_zoom_speed_ref: float = 400.0
+@export var camera_zoom_smoothing: float = 3.0
+@export var trailer_count: int = 0
 
 var _flames: Dictionary = {}
 var _thruster_positions: Dictionary = {}
@@ -43,6 +47,15 @@ func _physics_process(_delta: float) -> void:
 	var forward_dir := _local_to_global_dir(Vector2(0, -1))
 	var forward_speed := linear_velocity.dot(forward_dir)
 	var turn_factor := clampf(absf(forward_speed) / 150.0, 0.1, 1.0)
+
+	# Camera zoom: pull out with speed
+	var speed := linear_velocity.length()
+	var zoom_t := clampf(speed / camera_zoom_speed_ref, 0.0, 1.0)
+	var target_zoom := lerpf(camera_zoom_min, camera_zoom_max, zoom_t)
+	var camera: Camera2D = $Camera2D
+	var current: float = camera.zoom.x
+	var new_zoom := lerpf(current, target_zoom, _delta * camera_zoom_smoothing)
+	camera.zoom = Vector2(new_zoom, new_zoom)
 
 	if Input.is_action_pressed("thrust_forward"):
 		var force := _local_to_global_dir(Vector2(0, -forward_thrust_force))

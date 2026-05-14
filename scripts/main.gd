@@ -1,7 +1,6 @@
 extends Node2D
 
-@export var boundary_thickness: float = 20.0
-@export var asteroid_spawn_interval: float = 1.5
+@export var asteroid_spawn_interval: float = 0.7
 @export var asteroid_speed_min: float = 40.0
 @export var asteroid_speed_max: float = 120.0
 @export var asteroid_fast_chance: float = 0.15
@@ -13,43 +12,12 @@ extends Node2D
 const ASTEROID_SCENE := preload("res://scenes/asteroid.tscn")
 
 var _viewport_size: Vector2
+@onready var _truck: Node2D = $Truck
 
 
 func _ready() -> void:
 	_viewport_size = get_viewport_rect().size
-	_setup_boundaries()
 	_setup_asteroid_timer()
-
-
-func _setup_boundaries() -> void:
-	var w := _viewport_size.x
-	var h := _viewport_size.y
-
-	_position_wall($Boundaries/TopWall,
-		Vector2(w / 2.0, -boundary_thickness / 2.0),
-		Vector2(w + boundary_thickness * 2, boundary_thickness))
-
-	_position_wall($Boundaries/BottomWall,
-		Vector2(w / 2.0, h + boundary_thickness / 2.0),
-		Vector2(w + boundary_thickness * 2, boundary_thickness))
-
-	_position_wall($Boundaries/LeftWall,
-		Vector2(-boundary_thickness / 2.0, h / 2.0),
-		Vector2(boundary_thickness, h + boundary_thickness * 2))
-
-	_position_wall($Boundaries/RightWall,
-		Vector2(w + boundary_thickness / 2.0, h / 2.0),
-		Vector2(boundary_thickness, h + boundary_thickness * 2))
-
-
-func _position_wall(wall: StaticBody2D, pos: Vector2, wall_size: Vector2) -> void:
-	wall.position = pos
-	wall.collision_layer = 2
-	wall.collision_mask = 1
-	var shape := wall.get_node("CollisionShape2D")
-	var rect := RectangleShape2D.new()
-	rect.size = wall_size
-	shape.shape = rect
 
 
 func _setup_asteroid_timer() -> void:
@@ -78,24 +46,15 @@ func _spawn_asteroid() -> void:
 	asteroid.mass = asteroid_mass * (size / asteroid_size_max)
 	asteroid.asteroid_size = size
 
-	var edge := randi() % 4
-	var spawn_pos: Vector2
-	var target: Vector2
-	var margin := 80.0
+	# Spawn in a wide ring around the player, well beyond visible area
+	var center := _truck.global_position
+	var spawn_radius := 1400.0
+	var angle := randf_range(0, TAU)
+	var spawn_pos := center + Vector2(cos(angle), sin(angle)) * spawn_radius
 
-	match edge:
-		0: # top
-			spawn_pos = Vector2(randf_range(0, _viewport_size.x), -margin)
-			target = Vector2(randf_range(0, _viewport_size.x), _viewport_size.y + margin)
-		1: # bottom
-			spawn_pos = Vector2(randf_range(0, _viewport_size.x), _viewport_size.y + margin)
-			target = Vector2(randf_range(0, _viewport_size.x), -margin)
-		2: # left
-			spawn_pos = Vector2(-margin, randf_range(0, _viewport_size.y))
-			target = Vector2(_viewport_size.x + margin, randf_range(0, _viewport_size.y))
-		3: # right
-			spawn_pos = Vector2(_viewport_size.x + margin, randf_range(0, _viewport_size.y))
-			target = Vector2(-margin, randf_range(0, _viewport_size.y))
+	# Aim generally toward the player with some randomness
+	var aim_offset := Vector2(randf_range(-400, 400), randf_range(-400, 400))
+	var target := center + aim_offset
 
 	asteroid.global_position = spawn_pos
 	asteroid.rotation = randf_range(0, TAU)
