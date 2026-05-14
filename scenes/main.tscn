@@ -1,10 +1,32 @@
-[gd_scene format=3 uid="uid://c2cbafam4l6f6"]
+[gd_scene load_steps=5 format=3 uid="uid://c2cbafam4l6f6"]
 
 [ext_resource type="Script" uid="uid://ddokxj2iyrjft" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://scenes/truck/truck.tscn" id="2_truck"]
+[ext_resource type="Shader" path="res://shaders/starfield.gdshader" id="3_starfield_shader"]
+[ext_resource type="Script" path="res://scripts/starfield.gd" id="4_starfield_script"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_starfield"]
+shader = ExtResource("3_starfield_shader")
+shader_parameter/truck_position = Vector2(0, 0)
+shader_parameter/cam_rotation = 0.0
+shader_parameter/cam_zoom = 1.0
+shader_parameter/screen_target = Vector2(960, 660)
+shader_parameter/truck_velocity = Vector2(0, 0)
+shader_parameter/cam_angular_velocity = 0.0
+shader_parameter/trail_scale = 0.15
+shader_parameter/rotation_trail_scale = 0.007
 
 [node name="Main" type="Node2D" unique_id=747388140]
 script = ExtResource("1_main")
+
+[node name="StarfieldLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="StarfieldRect" type="ColorRect" parent="StarfieldLayer"]
+material = SubResource("ShaderMaterial_starfield")
+offset_right = 1920.0
+offset_bottom = 1080.0
+script = ExtResource("4_starfield_script")
 
 [node name="Truck" parent="." unique_id=792170668 instance=ExtResource("2_truck")]
 position = Vector2(960, 540)

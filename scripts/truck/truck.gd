@@ -14,8 +14,8 @@ extends RigidBody2D
 @export var camera_zoom_speed_ref: float = 400.0
 @export var camera_zoom_smoothing: float = 3.0
 @export var camera_rotation_smoothing: float = 5.0
-@export var camera_forward_offset: float = 120.0
-@export var trailer_count: int = 0
+@export var camera_forward_offset: float = 200.0
+@export var trailer_count: int = 1
 
 var _flames: Dictionary = {}
 var _thruster_positions: Dictionary = {}
