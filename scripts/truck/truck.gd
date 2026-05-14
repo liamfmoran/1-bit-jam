@@ -1,13 +1,14 @@
 extends RigidBody2D
 
-@export var forward_thrust_force: float = 600.0
-@export var reverse_thrust_force: float = 400.0
-@export var turn_thrust_force: float = 300.0
+@export var forward_thrust_force: float = 1500.0
+@export var reverse_thrust_force: float = 1000.0
+@export var turn_thrust_force: float = 800.0
 @export var truck_mass: float = 2.0
 @export var truck_width: float = 60.0
 @export var truck_height: float = 100.0
-@export var linear_damp_value: float = 0.075
-@export var angular_damp_value: float = 0.2
+@export var linear_damp_value: float = 0.5
+@export var angular_damp_value: float = 3.0
+@export var lateral_friction: float = 15.0
 @export var trailer_count: int = 3
 
 var _flames: Dictionary = {}
@@ -33,6 +34,16 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	_hide_all_flames()
 
+	# Lateral friction: kill sideways sliding for road-like grip
+	var lateral_dir := _local_to_global_dir(Vector2(1, 0))
+	var lateral_speed := linear_velocity.dot(lateral_dir)
+	apply_central_force(-lateral_dir * lateral_speed * lateral_friction * mass)
+
+	# Speed-dependent turning: can't turn much while stationary
+	var forward_dir := _local_to_global_dir(Vector2(0, -1))
+	var forward_speed := linear_velocity.dot(forward_dir)
+	var turn_factor := clampf(absf(forward_speed) / 150.0, 0.1, 1.0)
+
 	if Input.is_action_pressed("thrust_forward"):
 		var force := _local_to_global_dir(Vector2(0, -forward_thrust_force))
 		apply_force(force, _global_offset("forward_left"))
@@ -49,11 +60,11 @@ func _physics_process(_delta: float) -> void:
 
 	if Input.is_action_pressed("turn_left"):
 		apply_force(
-			_local_to_global_dir(Vector2(turn_thrust_force, 0)),
+			_local_to_global_dir(Vector2(turn_thrust_force * turn_factor, 0)),
 			_global_offset("turn_bl")
 		)
 		apply_force(
-			_local_to_global_dir(Vector2(-turn_thrust_force, 0)),
+			_local_to_global_dir(Vector2(-turn_thrust_force * turn_factor, 0)),
 			_global_offset("turn_tr")
 		)
 		_show_flame("turn_bl")
@@ -61,11 +72,11 @@ func _physics_process(_delta: float) -> void:
 
 	if Input.is_action_pressed("turn_right"):
 		apply_force(
-			_local_to_global_dir(Vector2(-turn_thrust_force, 0)),
+			_local_to_global_dir(Vector2(-turn_thrust_force * turn_factor, 0)),
 			_global_offset("turn_br")
 		)
 		apply_force(
-			_local_to_global_dir(Vector2(turn_thrust_force, 0)),
+			_local_to_global_dir(Vector2(turn_thrust_force * turn_factor, 0)),
 			_global_offset("turn_tl")
 		)
 		_show_flame("turn_br")
@@ -196,6 +207,9 @@ func _spawn_trailers() -> void:
 		trailer.global_rotation = preceding_body.global_rotation
 
 		get_parent().add_child(trailer)
+
+		trailer.preceding_body = preceding_body
+		trailer.preceding_half_height = preceding_hh
 
 		var joint := PinJoint2D.new()
 		joint.name = "TrailerJoint_%d" % (i + 1)

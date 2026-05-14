@@ -25,3 +25,37 @@ color = Color(1, 1, 1, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_trailer")
+
+[node name="Flames" type="Node2D" parent="."]
+
+[node name="FlameTurnBL" type="ColorRect" parent="Flames"]
+visible = false
+offset_left = -42.0
+offset_top = 34.0
+offset_right = -30.0
+offset_bottom = 40.0
+color = Color(1, 1, 1, 1)
+
+[node name="FlameTurnTR" type="ColorRect" parent="Flames"]
+visible = false
+offset_left = 30.0
+offset_top = -40.0
+offset_right = 42.0
+offset_bottom = -34.0
+color = Color(1, 1, 1, 1)
+
+[node name="FlameTurnBR" type="ColorRect" parent="Flames"]
+visible = false
+offset_left = 30.0
+offset_top = 34.0
+offset_right = 42.0
+offset_bottom = 40.0
+color = Color(1, 1, 1, 1)
+
+[node name="FlameTurnTL" type="ColorRect" parent="Flames"]
+visible = false
+offset_left = -42.0
+offset_top = -40.0
+offset_right = -30.0
+offset_bottom = -34.0
+color = Color(1, 1, 1, 1)
