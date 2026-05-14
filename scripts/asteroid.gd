@@ -11,6 +11,13 @@ var _broken := false
 const ASTEROID_SCENE := preload("res://scenes/asteroid.tscn")
 
 
+func hit(_at_position: Vector2) -> void:
+	if _broken:
+		return
+	_broken = true
+	_break_apart.call_deferred()
+
+
 func _ready() -> void:
 	gravity_scale = 0.0
 	linear_damp = 0.0

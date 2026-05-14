@@ -16,7 +16,10 @@ extends RigidBody2D
 @export var camera_rotation_smoothing: float = 5.0
 @export var camera_forward_offset: float = 200.0
 @export var trailer_count: int = 1
+@export var fire_rate: float = 0.2
+@export var bullet_speed: float = 800.0
 
+var _fire_cooldown: float = 0.0
 var _flames: Dictionary = {}
 var _thruster_positions: Dictionary = {}
 var _trailers: Array[RigidBody2D] = []
@@ -25,6 +28,7 @@ var _cam_zoom: float = 1.0
 var _viewport_center: Vector2
 
 const TRAILER_SCENE := preload("res://scenes/truck/trailer.tscn")
+const BULLET_SCENE := preload("res://scenes/bullet.tscn")
 
 
 func _ready() -> void:
@@ -41,8 +45,10 @@ func _ready() -> void:
 	_spawn_trailers.call_deferred()
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	_hide_all_flames()
+
+	_fire_cooldown = maxf(_fire_cooldown - delta, 0.0)
 
 	# Lateral friction: kill sideways sliding for road-like grip
 	var lateral_dir := _local_to_global_dir(Vector2(1, 0))
@@ -58,7 +64,7 @@ func _physics_process(_delta: float) -> void:
 	var speed := linear_velocity.length()
 	var zoom_t := clampf(speed / camera_zoom_speed_ref, 0.0, 1.0)
 	var target_zoom := lerpf(camera_zoom_min, camera_zoom_max, zoom_t)
-	_cam_zoom = lerpf(_cam_zoom, target_zoom, _delta * camera_zoom_smoothing)
+	_cam_zoom = lerpf(_cam_zoom, target_zoom, delta * camera_zoom_smoothing)
 
 	if Input.is_action_pressed("thrust_forward"):
 		var force := _local_to_global_dir(Vector2(0, -forward_thrust_force))
@@ -85,6 +91,10 @@ func _physics_process(_delta: float) -> void:
 		)
 		_show_flame("turn_bl")
 		_show_flame("turn_tr")
+
+	if Input.is_action_pressed("fire") and _fire_cooldown == 0.0:
+		_fire_cooldown = fire_rate
+		_fire_blasters()
 
 	if Input.is_action_pressed("turn_right"):
 		apply_force(
@@ -213,6 +223,15 @@ func _local_to_global_dir(local_dir: Vector2) -> Vector2:
 
 func _global_offset(thruster_name: String) -> Vector2:
 	return transform.basis_xform(_thruster_positions[thruster_name])
+
+
+func _fire_blasters() -> void:
+	var dir := _local_to_global_dir(Vector2(0, -1))
+	for blaster in [$BlasterLeft, $BlasterRight]:
+		var bullet: Area2D = BULLET_SCENE.instantiate()
+		bullet.global_position = blaster.global_position
+		bullet.velocity = linear_velocity + dir * bullet_speed
+		get_parent().add_child(bullet)
 
 
 func _spawn_trailers() -> void:

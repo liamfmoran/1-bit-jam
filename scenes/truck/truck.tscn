@@ -1,86 +1,86 @@
-[gd_scene load_steps=3 format=3 uid="uid://dmc5f3cxkqnxe"]
+[gd_scene format=3 uid="uid://b817h1um4p4rf"]
 
-[ext_resource type="Script" path="res://scripts/truck/truck.gd" id="1_truck"]
+[ext_resource type="Script" uid="uid://baxwbn5q15mrn" path="res://scripts/truck/truck.gd" id="1_truck"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_truck"]
 size = Vector2(60, 100)
 
-[node name="Truck" type="RigidBody2D"]
+[node name="Truck" type="RigidBody2D" unique_id=2076984724]
 continuous_cd = 1
 script = ExtResource("1_truck")
+forward_thrust_force = 1000.0
+turn_thrust_force = 400.0
+truck_mass = 4.0
 
-[node name="TruckBody" type="ColorRect" parent="."]
+[node name="TruckBody" type="ColorRect" parent="." unique_id=885517454]
 offset_left = -30.0
 offset_top = -50.0
 offset_right = 30.0
 offset_bottom = 50.0
-color = Color(1, 1, 1, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=676706237]
 shape = SubResource("RectangleShape2D_truck")
 
-[node name="Flames" type="Node2D" parent="."]
+[node name="Flames" type="Node2D" parent="." unique_id=908788387]
 
-[node name="FlameForwardLeft" type="ColorRect" parent="Flames"]
+[node name="FlameForwardLeft" type="ColorRect" parent="Flames" unique_id=1758384865]
 visible = false
 offset_left = -34.0
 offset_top = 50.0
 offset_right = -26.0
 offset_bottom = 66.0
-color = Color(1, 1, 1, 1)
 
-[node name="FlameForwardRight" type="ColorRect" parent="Flames"]
+[node name="FlameForwardRight" type="ColorRect" parent="Flames" unique_id=630123098]
 visible = false
 offset_left = 26.0
 offset_top = 50.0
 offset_right = 34.0
 offset_bottom = 66.0
-color = Color(1, 1, 1, 1)
 
-[node name="FlameReverseLeft" type="ColorRect" parent="Flames"]
+[node name="FlameReverseLeft" type="ColorRect" parent="Flames" unique_id=2025107265]
 visible = false
 offset_left = -34.0
 offset_top = -66.0
 offset_right = -26.0
 offset_bottom = -50.0
-color = Color(1, 1, 1, 1)
 
-[node name="FlameReverseRight" type="ColorRect" parent="Flames"]
+[node name="FlameReverseRight" type="ColorRect" parent="Flames" unique_id=1831945296]
 visible = false
 offset_left = 26.0
 offset_top = -66.0
 offset_right = 34.0
 offset_bottom = -50.0
-color = Color(1, 1, 1, 1)
 
-[node name="FlameTurnBL" type="ColorRect" parent="Flames"]
+[node name="FlameTurnBL" type="ColorRect" parent="Flames" unique_id=1000449823]
 visible = false
 offset_left = -42.0
 offset_top = 44.0
 offset_right = -30.0
 offset_bottom = 50.0
-color = Color(1, 1, 1, 1)
 
-[node name="FlameTurnTR" type="ColorRect" parent="Flames"]
+[node name="FlameTurnTR" type="ColorRect" parent="Flames" unique_id=1872194270]
 visible = false
 offset_left = 30.0
 offset_top = -50.0
 offset_right = 42.0
 offset_bottom = -44.0
-color = Color(1, 1, 1, 1)
 
-[node name="FlameTurnBR" type="ColorRect" parent="Flames"]
+[node name="FlameTurnBR" type="ColorRect" parent="Flames" unique_id=554226994]
 visible = false
 offset_left = 30.0
 offset_top = 44.0
 offset_right = 42.0
 offset_bottom = 50.0
-color = Color(1, 1, 1, 1)
 
-[node name="FlameTurnTL" type="ColorRect" parent="Flames"]
+[node name="FlameTurnTL" type="ColorRect" parent="Flames" unique_id=629174882]
 visible = false
 offset_left = -42.0
 offset_top = -50.0
 offset_right = -30.0
 offset_bottom = -44.0
-color = Color(1, 1, 1, 1)
+
+[node name="BlasterLeft" type="Node2D" parent="."]
+position = Vector2(-35, 10)
+
+[node name="BlasterRight" type="Node2D" parent="."]
+position = Vector2(35, 10)
