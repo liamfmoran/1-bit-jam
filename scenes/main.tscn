@@ -1,12 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://b2rk7vxp5s1ao"]
+[gd_scene format=3 uid="uid://c2cbafam4l6f6"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="PackedScene" uid="uid://dmc5f3cxkqnxe" path="res://scenes/truck/truck.tscn" id="2_truck"]
+[ext_resource type="Script" uid="uid://ddokxj2iyrjft" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://scenes/truck/truck.tscn" id="2_truck"]
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" unique_id=747388140]
 script = ExtResource("1_main")
 
-[node name="Truck" parent="." instance=ExtResource("2_truck")]
-position = Vector2(960, 540)
+[node name="Truck" parent="." unique_id=792170668 instance=ExtResource("2_truck")]
+position = Vector2(960, 851)
+forward_thrust_force = 1000.0
+truck_mass = 4.0
+trailer_count = 1
 
-[node name="Camera2D" type="Camera2D" parent="Truck"]
+[node name="Camera2D" type="Camera2D" parent="Truck" unique_id=1455526756]
+position = Vector2(0, -314)
