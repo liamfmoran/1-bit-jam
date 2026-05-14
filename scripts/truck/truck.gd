@@ -13,11 +13,16 @@ extends RigidBody2D
 @export var camera_zoom_max: float = 0.7
 @export var camera_zoom_speed_ref: float = 400.0
 @export var camera_zoom_smoothing: float = 3.0
+@export var camera_rotation_smoothing: float = 5.0
+@export var camera_forward_offset: float = 120.0
 @export var trailer_count: int = 0
 
 var _flames: Dictionary = {}
 var _thruster_positions: Dictionary = {}
 var _trailers: Array[RigidBody2D] = []
+var _cam_rotation: float = 0.0
+var _cam_zoom: float = 1.0
+var _viewport_center: Vector2
 
 const TRAILER_SCENE := preload("res://scenes/truck/trailer.tscn")
 
@@ -29,6 +34,7 @@ func _ready() -> void:
 	angular_damp = angular_damp_value
 	collision_layer = 1
 	collision_mask = 7
+	_viewport_center = get_viewport_rect().size / 2.0
 	_calculate_thruster_positions()
 	_cache_flame_references()
 	_update_truck_visuals()
@@ -52,10 +58,7 @@ func _physics_process(_delta: float) -> void:
 	var speed := linear_velocity.length()
 	var zoom_t := clampf(speed / camera_zoom_speed_ref, 0.0, 1.0)
 	var target_zoom := lerpf(camera_zoom_min, camera_zoom_max, zoom_t)
-	var camera: Camera2D = $Camera2D
-	var current: float = camera.zoom.x
-	var new_zoom := lerpf(current, target_zoom, _delta * camera_zoom_smoothing)
-	camera.zoom = Vector2(new_zoom, new_zoom)
+	_cam_zoom = lerpf(_cam_zoom, target_zoom, _delta * camera_zoom_smoothing)
 
 	if Input.is_action_pressed("thrust_forward"):
 		var force := _local_to_global_dir(Vector2(0, -forward_thrust_force))
@@ -94,6 +97,17 @@ func _physics_process(_delta: float) -> void:
 		)
 		_show_flame("turn_br")
 		_show_flame("turn_tl")
+
+
+func _process(delta: float) -> void:
+	var screen_target := _viewport_center + Vector2(0, camera_forward_offset)
+	_cam_rotation = lerp_angle(_cam_rotation, global_rotation, delta * camera_rotation_smoothing)
+	var xform := Transform2D.IDENTITY
+	xform = xform.translated(-global_position)
+	xform = xform.rotated(-_cam_rotation)
+	xform = xform.scaled(Vector2(_cam_zoom, _cam_zoom))
+	xform = xform.translated(screen_target)
+	get_viewport().canvas_transform = xform
 
 
 func _calculate_thruster_positions() -> void:

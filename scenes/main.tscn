@@ -7,10 +7,4 @@
 script = ExtResource("1_main")
 
 [node name="Truck" parent="." unique_id=792170668 instance=ExtResource("2_truck")]
-position = Vector2(960, 851)
-forward_thrust_force = 1000.0
-truck_mass = 4.0
-trailer_count = 1
-
-[node name="Camera2D" type="Camera2D" parent="Truck" unique_id=1455526756]
-position = Vector2(0, -314)
+position = Vector2(960, 540)
