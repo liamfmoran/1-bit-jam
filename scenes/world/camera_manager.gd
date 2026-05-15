@@ -10,22 +10,22 @@ extends Camera2D
 @export var undock_zoom_duration: float = 1.0
 @export var rotation_smoothing: float = 6.0
 
-var _is_docked: bool = false
+var _ship: Node2D
 var _zoom_tween: Tween
 var _current_rotation: float = 0.0
-var _log_timer: float = 0.0
 var _dock_zoom_weight: float = 0.0
 
 
 func _ready() -> void:
 	ignore_rotation = false
 	zoom = Vector2(zoom_max, zoom_max)
+	_ship = get_tree().get_first_node_in_group("player") as Node2D
 	GameState.docked.connect(_on_docked)
 	GameState.undocked.connect(_on_undocked)
 
 
 func _physics_process(delta: float) -> void:
-	var ship := get_tree().get_first_node_in_group("player") as Node2D
+	var ship := _ship
 	if not ship:
 		return
 
@@ -33,11 +33,6 @@ func _physics_process(delta: float) -> void:
 
 	_current_rotation = lerp_angle(_current_rotation, ship.global_rotation, rotation_smoothing * delta)
 	global_rotation = _current_rotation
-
-	_log_timer += delta
-	if _log_timer >= 2.0:
-		_log_timer = 0.0
-		print("[camera] ship_rot=%.3f cam_rot=%.3f pos=%s" % [ship.global_rotation, global_rotation, ship.global_position])
 
 	var speed := (ship as RigidBody2D).linear_velocity.length()
 	var base_zoom_target := clampf(zoom_max - speed * zoom_speed_factor, zoom_min, zoom_max)
@@ -49,7 +44,6 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_docked() -> void:
-	_is_docked = true
 	if _zoom_tween:
 		_zoom_tween.kill()
 	_zoom_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
@@ -60,7 +54,6 @@ func _on_docked() -> void:
 
 
 func _on_undocked() -> void:
-	_is_docked = false
 	if _zoom_tween:
 		_zoom_tween.kill()
 	_zoom_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)

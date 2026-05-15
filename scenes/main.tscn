@@ -5,12 +5,28 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/minimap.tscn" id="3_b2n6x"]
 [ext_resource type="Script" uid="uid://708ycscidli0" path="res://scenes/effects/starfield.gd" id="4_m6k3x"]
 [ext_resource type="Shader" path="res://shaders/starfield.gdshader" id="5_v9n2p"]
+[ext_resource type="Shader" path="res://shaders/onebit_post.gdshader" id="6_n4k8r"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_r4w8t"]
 shader = ExtResource("5_v9n2p")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p9k2m"]
+shader = ExtResource("6_n4k8r")
+
 [node name="Main" type="Node2D" unique_id=1111864905]
 script = ExtResource("1_a3k7m")
+
+[node name="World" parent="." instance=ExtResource("2_p5v8n")]
+
+[node name="PostProcessLayer" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="OneBitPost" type="ColorRect" parent="PostProcessLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+material = SubResource("ShaderMaterial_p9k2m")
 
 [node name="StarfieldLayer" type="CanvasLayer" parent="."]
 layer = -1
@@ -23,9 +39,7 @@ grow_vertical = 2
 material = SubResource("ShaderMaterial_r4w8t")
 script = ExtResource("4_m6k3x")
 
-[node name="World" parent="." instance=ExtResource("2_p5v8n")]
-
 [node name="HUD" type="CanvasLayer" parent="."]
-layer = 1
+layer = 4
 
 [node name="Minimap" parent="HUD" instance=ExtResource("3_b2n6x")]
