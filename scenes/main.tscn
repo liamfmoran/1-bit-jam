@@ -1,12 +1,16 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scenes/main.gd" id="1_a3k7m"]
 [ext_resource type="PackedScene" path="res://scenes/ship/truck_cab.tscn" id="2_r9w5t"]
+[ext_resource type="PackedScene" path="res://scenes/world/dock.tscn" id="3_h7d2k"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_a3k7m")
 
 [node name="TruckCab" parent="." instance=ExtResource("2_r9w5t")]
+
+[node name="Dock" parent="." instance=ExtResource("3_h7d2k")]
+position = Vector2(0, -400)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position_smoothing_enabled = true
