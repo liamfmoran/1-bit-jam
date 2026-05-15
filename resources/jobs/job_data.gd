@@ -1,8 +1,21 @@
 class_name JobData
 extends Resource
 
-@export var job_name: StringName
+enum QuestType {
+	FETCH,
+	DELIVERY
+}
+
+@export var display_name: String
 @export var description: String
-@export var value: int = 100
-@export var weight: float = 5.0
-@export var destination_dock_name: StringName
+@export var type: QuestType
+
+@export var money_reward: int = 100
+@export var faction_reward: int = 1
+
+@export var origin: WorldData.Stations
+@export var destination: WorldData.Stations
+@export var fetch_coordinate_override: Vector2 = Vector2(0,0)
+
+@export var cargo: Array[ItemData]
+@export var conditions: Array

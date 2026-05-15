@@ -18,14 +18,14 @@ var owned_parts: Array = []
 
 
 
-func accept_job(job: Resource) -> void:
+func accept_job(job: JobData) -> void:
 	active_jobs.append(job)
 	jobs_changed.emit()
 
 
-func complete_job(job: Resource) -> void:
+func complete_job(job: JobData) -> void:
 	active_jobs.erase(job)
-	money += job.value
+	money += job.money_reward
 	money_changed.emit(money)
 	jobs_changed.emit()
 
@@ -47,10 +47,10 @@ func sell_part(part: Resource) -> void:
 	inventory_changed.emit()
 
 
-func complete_delivery(dock_name: StringName) -> void:
+func complete_delivery(dock_name: WorldData.Stations) -> void:
 	var completed := []
 	for job in active_jobs:
-		if job.destination_dock_name == dock_name:
+		if job.destination == dock_name:
 			completed.append(job)
 	for job in completed:
 		complete_job(job)

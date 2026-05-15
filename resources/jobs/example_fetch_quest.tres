@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="JobData" format=3 uid="uid://b1in8w8ppvnu6"]
+
+[ext_resource type="Script" uid="uid://bn83rld2thelr" path="res://resources/items/item_data.gd" id="1_6wqlm"]
+[ext_resource type="Script" uid="uid://bc6lakv7n7wpt" path="res://resources/jobs/job_data.gd" id="2_oa1lt"]
+
+[resource]
+script = ExtResource("2_oa1lt")
+display_name = "Forgot my Wallet"
+description = "Can you check out this are in space? I think I lost my Wallet there."
+origin = 1
+destination = 4
+destination_coordinate_override = Vector2(100, 100)
+metadata/_custom_type_script = "uid://bc6lakv7n7wpt"

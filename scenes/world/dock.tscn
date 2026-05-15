@@ -1,36 +1,37 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://b54hdarw4ck8j"]
 
-[ext_resource type="Script" path="res://scenes/world/dock.gd" id="1_p3v8n"]
+[ext_resource type="Script" uid="uid://vovy6tlsdec1" path="res://scenes/world/dock.gd" id="1_p3v8n"]
+[ext_resource type="Script" uid="uid://bc6lakv7n7wpt" path="res://resources/jobs/job_data.gd" id="2_yjxet"]
+[ext_resource type="Resource" uid="uid://cm7djeqn1jj1f" path="res://resources/jobs/example_delivery_quest.tres" id="3_8b5gd"]
+[ext_resource type="Resource" uid="uid://b1in8w8ppvnu6" path="res://resources/jobs/example_fetch_quest.tres" id="4_2o37t"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m4w9j"]
 size = Vector2(400, 300)
 
-[node name="Dock" type="Node2D"]
+[node name="Dock" type="Node2D" unique_id=1013206030]
 script = ExtResource("1_p3v8n")
+jobs = Array[ExtResource("2_yjxet")]([ExtResource("3_8b5gd"), ExtResource("4_2o37t")])
 
-[node name="Outline" type="Line2D" parent="."]
+[node name="Outline" type="Line2D" parent="." unique_id=2088579739]
 points = PackedVector2Array(-200, -150, 200, -150, 200, 150, -200, 150, -200, -150)
 width = 2.0
-default_color = Color(1, 1, 1, 1)
 
-[node name="DetectionZone" type="Area2D" parent="."]
+[node name="DetectionZone" type="Area2D" parent="." unique_id=1422698405]
 
-[node name="DetectionShape" type="CollisionShape2D" parent="DetectionZone"]
+[node name="DetectionShape" type="CollisionShape2D" parent="DetectionZone" unique_id=1754069099]
 shape = SubResource("RectangleShape2D_m4w9j")
 
-[node name="Panels" type="Node2D" parent="."]
+[node name="Panels" type="Node2D" parent="." unique_id=1362702286]
 
-[node name="LeftPanel" type="ColorRect" parent="Panels"]
+[node name="LeftPanel" type="ColorRect" parent="Panels" unique_id=1058903222]
 offset_left = -380.0
 offset_top = -200.0
 offset_right = -140.0
 offset_bottom = 200.0
 pivot_offset = Vector2(240, 0)
-color = Color(1, 1, 1, 1)
 
-[node name="RightPanel" type="ColorRect" parent="Panels"]
+[node name="RightPanel" type="ColorRect" parent="Panels" unique_id=749663073]
 offset_left = 140.0
 offset_top = -200.0
 offset_right = 380.0
 offset_bottom = 200.0
-color = Color(1, 1, 1, 1)

@@ -1,7 +1,6 @@
 extends Node2D
 
-@export var dock_name: StringName = &"Dock"
-@export var destination_dock_name: StringName = &"Dock"
+@export var dock_name: WorldData.Stations
 @export var jobs: Array[JobData] = []
 @export var parts_for_sale: Array[ShipPartData] = []
 

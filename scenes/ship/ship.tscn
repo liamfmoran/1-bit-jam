@@ -37,6 +37,6 @@ offset_bottom = 40.0
 
 [node name="FlameSRL" type="ColorRect" parent="Flames" unique_id=391842263]
 
-[node name="FlameLAT_R" type="ColorRect" parent="Flames"]
+[node name="FlameLAT_R" type="ColorRect" parent="Flames" unique_id=881506378]
 
-[node name="FlameLAT_L" type="ColorRect" parent="Flames"]
+[node name="FlameLAT_L" type="ColorRect" parent="Flames" unique_id=1940546229]

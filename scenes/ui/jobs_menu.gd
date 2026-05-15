@@ -8,7 +8,7 @@ const JOB_ITEM_SCENE = preload("res://scenes/ui/job_item.tscn")
 
 var _job_group: ButtonGroup
 var _selected_item: Button
-var _available_jobs: Array = []
+var _available_jobs: Array[JobData] = [preload("res://resources/jobs/example_delivery_quest.tres")]
 
 
 func _ready() -> void:
@@ -33,7 +33,7 @@ func _populate_list() -> void:
 
 	for job in _available_jobs:
 		var item := JOB_ITEM_SCENE.instantiate()
-		item.text = "%s → %s ($%d)" % [job.job_name, job.destination_dock_name, job.value]
+		item.text = "%s → %s ($%d)" % [job.display_name, job.destination, job.money_reward]
 		item.job_data = job
 		item.button_group = _job_group
 		item.toggled.connect(_on_job_toggled.bind(item))
@@ -64,6 +64,6 @@ func _refresh_carrying() -> void:
 
 	for job in GameState.active_jobs:
 		var label := Label.new()
-		label.text = "%s → %s" % [job.job_name, job.destination_dock_name]
+		label.text = "%s → %s" % [job.display_name, job.destination]
 		label.add_theme_color_override("font_color", Color.BLACK)
 		carrying_list.add_child(label)
