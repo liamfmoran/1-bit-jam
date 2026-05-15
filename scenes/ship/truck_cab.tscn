@@ -1,0 +1,71 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/ship/truck_cab.gd" id="1_k8m3p"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v4n7q"]
+size = Vector2(40, 80)
+
+[node name="TruckCab" type="RigidBody2D"]
+linear_damp = 0.05
+angular_damp = 0.1
+script = ExtResource("1_k8m3p")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_v4n7q")
+
+[node name="Hull" type="ColorRect" parent="."]
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+offset_bottom = 40.0
+color = Color(1, 1, 1, 1)
+
+[node name="Flames" type="Node2D" parent="."]
+
+[node name="FlameRL" type="ColorRect" parent="Flames"]
+visible = false
+offset_left = -12.0
+offset_top = 40.0
+offset_right = -8.0
+offset_bottom = 52.0
+color = Color(1, 1, 1, 1)
+
+[node name="FlameRR" type="ColorRect" parent="Flames"]
+visible = false
+offset_left = 8.0
+offset_top = 40.0
+offset_right = 12.0
+offset_bottom = 52.0
+color = Color(1, 1, 1, 1)
+
+[node name="FlameFL" type="ColorRect" parent="Flames"]
+visible = false
+offset_left = -12.0
+offset_top = -52.0
+offset_right = -8.0
+offset_bottom = -40.0
+color = Color(1, 1, 1, 1)
+
+[node name="FlameFR" type="ColorRect" parent="Flames"]
+visible = false
+offset_left = 8.0
+offset_top = -52.0
+offset_right = 12.0
+offset_bottom = -40.0
+color = Color(1, 1, 1, 1)
+
+[node name="FlameSFR" type="ColorRect" parent="Flames"]
+visible = false
+offset_left = 20.0
+offset_top = -27.0
+offset_right = 32.0
+offset_bottom = -23.0
+color = Color(1, 1, 1, 1)
+
+[node name="FlameSFL" type="ColorRect" parent="Flames"]
+visible = false
+offset_left = -32.0
+offset_top = -27.0
+offset_right = -20.0
+offset_bottom = -23.0
+color = Color(1, 1, 1, 1)
