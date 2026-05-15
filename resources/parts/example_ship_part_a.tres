@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ShipPartData" format=3]
+
+[ext_resource type="Script" uid="uid://coly87d6qr7at" path="res://resources/parts/ship_part_data.gd" id="1_a4x7n"]
+
+[resource]
+script = ExtResource("1_a4x7n")
+part_name = &"Example Ship Part A"
+slot_type = &"thruster"
+stats = {}
+mass = 1.0
+cost = 50

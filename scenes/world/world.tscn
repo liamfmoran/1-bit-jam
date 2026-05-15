@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://cw8c6jlc63r1u" path="res://scenes/ship/ship.tscn" id="1_k4m9p"]
+[ext_resource type="PackedScene" path="res://scenes/world/dock.tscn" id="2_n7x3q"]
+[ext_resource type="Resource" path="res://resources/parts/example_ship_part_a.tres" id="3_p8v2m"]
+[ext_resource type="Resource" path="res://resources/parts/example_ship_part_b.tres" id="4_q5n3k"]
+[ext_resource type="Resource" path="res://resources/jobs/example_job_a.tres" id="5_x2w7r"]
+[ext_resource type="Resource" path="res://resources/jobs/example_job_b.tres" id="6_t4m9n"]
+[ext_resource type="Script" path="res://scenes/world/camera_manager.gd" id="7_c3p6r"]
+
+[node name="World" type="Node2D"]
+
+[node name="Ship" parent="." instance=ExtResource("1_k4m9p")]
+rotation_thrust_force = 200.0
+
+[node name="DockA" parent="." instance=ExtResource("2_n7x3q")]
+position = Vector2(0, -400)
+dock_name = &"Dock A"
+destination_dock_name = &"Dock B"
+jobs = [ExtResource("5_x2w7r")]
+parts_for_sale = [ExtResource("3_p8v2m"), ExtResource("4_q5n3k")]
+
+[node name="DockB" parent="." instance=ExtResource("2_n7x3q")]
+position = Vector2(1200, -400)
+dock_name = &"Dock B"
+destination_dock_name = &"Dock A"
+jobs = [ExtResource("6_t4m9n")]
+parts_for_sale = [ExtResource("3_p8v2m"), ExtResource("4_q5n3k")]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("7_c3p6r")
