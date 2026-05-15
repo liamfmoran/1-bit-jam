@@ -7,6 +7,11 @@ extends Node2D
 const ANIM_DURATION := 0.4
 
 var _panel_tween: Tween
+var _docking_menu: Control
+var _docking_menu_layer: CanvasLayer
+var _docked_ship: RigidBody2D
+
+const DOCKING_MENU = preload("res://scenes/ui/docking_menu.tscn")
 
 
 func _ready() -> void:
@@ -17,13 +22,43 @@ func _ready() -> void:
 
 
 func _on_body_entered(body: Node2D) -> void:
-	if body is RigidBody2D:
-		_animate_panels(true)
+	if _docked_ship or not body is RigidBody2D:
+		return
+	_docked_ship = body
+	_animate_panels(true)
+	await _panel_tween.finished
+	_open_docking_menu()
 
 
 func _on_body_exited(body: Node2D) -> void:
-	if body is RigidBody2D:
-		_animate_panels(false)
+	if body != _docked_ship:
+		return
+	_docked_ship = null
+	if _docking_menu:
+		_close_docking_menu()
+	_animate_panels(false)
+
+
+func _open_docking_menu() -> void:
+	if _docking_menu:
+		return
+	_docking_menu = DOCKING_MENU.instantiate()
+	_docking_menu.closed.connect(_close_docking_menu)
+	_docking_menu_layer = CanvasLayer.new()
+	_docking_menu_layer.layer = 128
+	_docking_menu_layer.add_child(_docking_menu)
+	add_child(_docking_menu_layer)
+	_docking_menu_layer.process_mode = PROCESS_MODE_WHEN_PAUSED
+	get_tree().paused = true
+
+
+func _close_docking_menu() -> void:
+	if not _docking_menu:
+		return
+	get_tree().paused = false
+	_docking_menu_layer.queue_free()
+	_docking_menu = null
+	_docking_menu_layer = null
 
 
 func _animate_panels(opening: bool) -> void:
