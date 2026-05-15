@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://cw8c6jlc63r1u"]
 
-[ext_resource type="Script" uid="uid://f4d3q37rtla0" path="res://scenes/ship/truck_cab.gd" id="1_k8m3p"]
+[ext_resource type="Script" uid="uid://f4d3q37rtla0" path="res://scenes/ship/ship.gd" id="1_k8m3p"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v4n7q"]
 size = Vector2(40, 80)
 
-[node name="TruckCab" type="RigidBody2D" unique_id=1395243470]
+[node name="Ship" type="RigidBody2D" unique_id=1395243470 groups=["player"]]
 linear_damp = 0.05
 angular_damp = 0.1
 script = ExtResource("1_k8m3p")

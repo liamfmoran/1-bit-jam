@@ -1,25 +1,31 @@
 [gd_scene format=3 uid="uid://dekrpom6andu2"]
 
 [ext_resource type="Script" uid="uid://buk5u5rcjq0bo" path="res://scenes/main.gd" id="1_a3k7m"]
-[ext_resource type="PackedScene" uid="uid://cw8c6jlc63r1u" path="res://scenes/ship/truck_cab.tscn" id="2_r9w5t"]
-[ext_resource type="PackedScene" path="res://scenes/world/dock.tscn" id="3_h7d2k"]
+[ext_resource type="PackedScene" path="res://scenes/world/world.tscn" id="2_p5v8n"]
+[ext_resource type="PackedScene" path="res://scenes/ui/minimap.tscn" id="3_b2n6x"]
+[ext_resource type="Script" uid="uid://708ycscidli0" path="res://scenes/effects/starfield.gd" id="4_m6k3x"]
+[ext_resource type="Shader" path="res://shaders/starfield.gdshader" id="5_v9n2p"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r4w8t"]
+shader = ExtResource("5_v9n2p")
 
 [node name="Main" type="Node2D" unique_id=1111864905]
 script = ExtResource("1_a3k7m")
 
-[node name="TruckCab" parent="." unique_id=1343988 instance=ExtResource("2_r9w5t")]
-rotation_thrust_force = 200.0
+[node name="StarfieldLayer" type="CanvasLayer" parent="."]
+layer = -1
 
-[node name="Dock" parent="." unique_id=1369153257 instance=ExtResource("3_h7d2k")]
-position = Vector2(0, -400)
+[node name="Starfield" type="ColorRect" parent="StarfieldLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+material = SubResource("ShaderMaterial_r4w8t")
+script = ExtResource("4_m6k3x")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=143243504]
-position_smoothing_enabled = true
-rotation_smoothing_enabled = true
+[node name="World" parent="." instance=ExtResource("2_p5v8n")]
 
-[node name="Label" type="Label" parent="." unique_id=1483154676]
-offset_left = -234.0
-offset_top = -130.0
-offset_right = -105.0
-offset_bottom = -107.0
-text = "press E to break!"
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 1
+
+[node name="Minimap" parent="HUD" instance=ExtResource("3_b2n6x")]

@@ -2,7 +2,7 @@
 
 ## Concept
 
-Top-down 2D space trucking game. You pilot a truck cab through space, hauling trailers full of cargo between stations. The core loop is: **fly → find salvage / dock at station → load cargo (Tetris grid) → deliver → upgrade ship → repeat**.
+Top-down 2D space trucking game. You pilot a player ship through space, traveling between docks, taking delivery jobs, and upgrading your ship. The current core loop is: **fly → dock → accept jobs / buy parts → deliver → undock → repeat**.
 
 Built for a 1-bit graphics game jam. All visuals are rendered through a post-processing shader that reduces the frame to two colors with dithered shading.
 
@@ -14,18 +14,19 @@ Built for a 1-bit graphics game jam. All visuals are rendered through a post-pro
     * Engage in combat if nessessary to protect your ship or the cargo you are transporting.
     * Collect salvage from destroyed asteroids, debris, or enemies.
 
-2. **Dock with Space Stations**
-    * Entering a staton docking zone will allow you to:
-        * Refuel your ship (Automatically, not paid)
-        * Buy and sell from local vendors to upgrade your ship.
-        * Upgrade your ship - Improve your ships resiliance, damage output, and even cargo capacity.
-        * Complete a Delivery Job if you have one.
-        * Store excess cargo
+2. **Dock with Space Docks**
+    * Entering a dock zone opens animated side panels attached to the dock.
+    * While docked you can:
+        * Complete any delivery jobs for that dock automatically.
+        * Accept new delivery jobs from the jobs panel.
+        * Buy ship parts from the dock inventory panel.
+        * Leave the dock while the camera smoothly blends back into flight zoom.
 
 
 3. **Accept Jobs**
-    * Accepting a job will release you from the station, and a new map will be available to explore depending on the Job accepted.
-    * Fail a job, and you will lose out on money to spend on upgrading your ship.
+    * Jobs are point-to-point deliveries between named docks.
+    * Each dock can provide its own authored jobs and ship parts.
+    * Completing a job pays out as soon as you arrive at the destination dock.
 
 4. **Repeat**
     * If your ship is destroyed in flight, you will respawn at the most recent station and we will give you a basic ship.
@@ -34,43 +35,19 @@ Built for a 1-bit graphics game jam. All visuals are rendered through a post-pro
 
 ### Flight View
 
-Top-down space with the truck cab at center. Camera follows the truck with rotation smoothing and speed-dependent zoom (pulls out at high speed). Starfield parallax background.
+Top-down space with the player ship at center. The camera follows the ship with smoothed rotation and a velocity-based zoom target. Docking adds an animated zoom multiplier on top of that base zoom, so docked zoom and speed zoom overlap instead of handing off in steps. A starfield CanvasLayer reads the same camera rotation, so the background rotates with the view while preserving parallax and velocity streaks.
 
-The truck is driven by physics (RigidBody2D). Thrusters apply forces at specific points on the hull. Lateral friction provides "road-like" grip so the truck doesn't slide sideways. Trailers are connected via pin joints and have stabilization thrusters to follow the cab.
+The ship is driven by physics (RigidBody2D). Thrusters apply forces at specific points on the hull. Lateral friction provides "road-like" grip so the ship doesn't slide sideways. Trailers are connected via pin joints and have stabilization thrusters to follow the cab.
 
-Mass directly affects handling: `thrust / (cab_mass + cargo_mass)` determines acceleration. A fully loaded truck is sluggish; an empty one is nimble.
+Mass directly affects handling: `thrust / (cab_mass + cargo_mass)` determines acceleration. A fully loaded ship is sluggish; an empty one is nimble.
 
-### Cargo Management View
+### Dock Interface
 
-Full-screen overlay when docked. The game world pauses.
+Dock interaction is currently in-world rather than a full-screen paused mode.
 
-**Grid system**: Each vehicle (cab, each trailer) has an inventory grid. Items are Tetris-like shapes (L-pieces, T-pieces, rectangles, etc.) that must fit into the grid cells. Drag items from the station inventory into your vehicle grids, or vice versa.
-
-**Item properties**:
-- **Grid shape**: defined as cell offsets (e.g., an L-shape is `[(0,0), (0,1), (0,2), (1,2)]`)
-- **Mass**: contributes to total vehicle mass, affecting flight handling
-- **Base value**: how much the item is worth at full condition
-- **Radiation rate**: how fast the item's condition degrades over time (0 for stable items)
-- **Condition**: float 0.0–1.0, starts at 1.0. Sell price = `base_value × condition`
-
-**Value degradation**:
-- Radiation: items with `radiation_rate > 0` lose condition continuously while in your cargo
-- Collisions: when your truck or trailer takes a hit above a force threshold, all items in that vehicle's grid lose condition
-- Enemy attacks: same as collisions
-
-**Interactions**: click to pick up an item, R to rotate, click to place. Green/red ghost preview shows placement validity.
-
-### Ship Customization View
-
-Full-screen overlay when docked. Shows a top-down schematic of your ship (cab + trailers).
-
-Each vehicle has **part slots** — fixed attachment points for upgradeable components:
-- **Thrusters**: increase thrust multiplier, turn speed
-- **Shields**: absorb collision damage before it reaches cargo
-- **Weapons**: timer-based projectile spawners (lasers, etc.)
-- **Utility**: magnets (attract salvage pickups), scanners, etc.
-
-Click a slot to see available parts from the station's inventory. Buy/swap parts. A stats summary panel shows total mass, thrust, shield HP, and special abilities.
+- **Jobs panel**: a left-side panel listing delivery jobs available at the current dock.
+- **Inventory panel**: a right-side panel listing ship parts available for purchase.
+- **Animated dock panels**: the dock itself visually opens and closes as the player enters or exits the docking zone.
 
 ## Controls (Planned Input Actions)
 
@@ -103,10 +80,10 @@ Click a slot to see available parts from the station's inventory. Buy/swap parts
 - Dropped by destroyed asteroids, enemies, or found drifting
 - Collected on overlap (or pulled in by magnet utility part)
 
-### Stations
-- Fixed locations in the world (hand-placed, 2–3 for jam scope)
-- Dock zone triggers cargo/customize views
-- Each station has its own inventory, price modifiers, and parts for sale
+### Docks
+- Fixed locations in the world and currently hand-placed in `world.tscn`
+- Dock zones trigger delivery completion plus the in-world jobs and inventory panels
+- Each dock has its own authored jobs and parts for sale
 
 ## Visual Style
 
@@ -120,6 +97,12 @@ A full-screen shader on the topmost CanvasLayer converts the entire rendered fra
 4. Output `color_primary` (default white) or `color_secondary` (default black)
 
 Primary and secondary colors are exposed as shader uniforms for easy theme swapping (amber/black CRT, green/black terminal, etc.).
+
+### Camera and Starfield
+
+- Camera rotation is enabled, so the world rotates with the smoothed camera heading.
+- Docks and other world objects stay fixed in world space and correctly rotate in view as the camera turns.
+- The starfield shader receives `camera_rotation`, `ship_position`, and `ship_velocity` so it can follow camera heading while still showing parallax drift.
 
 ### Resolution
 
@@ -137,10 +120,10 @@ All source art is simple geometric shapes (ColorRects, `_draw()` calls). The 1-b
 These are intentional limits to keep the project shippable for a game jam:
 
 - No save/load system — a run is one play session
-- No procedural station placement — hand-place 2–3 stations
+- No procedural dock placement — hand-place docks for jam scope
 - No pathfinding for enemies — "steer toward player + shoot" is enough
 - No multiplayer
 - No settings menu (beyond possibly a palette color picker)
-- No minimap — use simple directional arrows on the HUD
+- Keep the minimap lightweight; it should stay a simple dock-and-heading reference rather than a full navigation screen
 - No quest/mission system — the loop is emergent from buy/sell/survive
 - Cap trailers at 2–3 for physics stability (PinJoint2D chains get wobbly beyond that)

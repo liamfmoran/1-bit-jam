@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" uid="uid://bc6lakv7n7wpt" path="res://resources/jobs/job_data.gd" id="1_n3k8v"]
+
+[resource]
+script = ExtResource("1_n3k8v")
+job_name = &"Example Job A"
+description = "Deliver cargo to Dock B"
+value = 100
+weight = 3.0
+destination_dock_name = &"Dock B"
