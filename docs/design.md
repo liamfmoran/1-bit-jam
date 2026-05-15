@@ -8,14 +8,27 @@ Built for a 1-bit graphics game jam. All visuals are rendered through a post-pro
 
 ## Core Loop
 
-1. **Fly** through space with physics-driven controls. Your truck has mass — heavier loads mean slower, less nimble flight.
-2. **Avoid hazards**: asteroids, enemy ships, radiation zones.
-3. **Collect salvage**: floating items dropped by destroyed asteroids or enemies.
-4. **Dock at stations**: enter a station's dock zone and interact to open the cargo view.
-5. **Manage cargo**: load/unload items in a Tetris-like backpack grid. Items have shapes, mass, and value.
-6. **Sell cargo** at stations for profit. Buy new items to haul for delivery elsewhere.
-7. **Upgrade your ship**: add weapons, shields, better thrusters, magnets, and other parts.
-8. **Repeat**: the more you haul, the more you earn, the better your ship gets.
+1. **Flying the Ship**
+    * Fly through space with physics-driven controls. Your ship's mass matters (Ex. heavier loads slow, less nimble flight).
+    * Navigate this treaterous space wasteland avoiding asteroids and debris.
+    * Engage in combat if nessessary to protect your ship or the cargo you are transporting.
+    * Collect salvage from destroyed asteroids, debris, or enemies.
+
+2. **Dock with Space Stations**
+    * Entering a staton docking zone will allow you to:
+        * Refuel your ship (Automatically, not paid)
+        * Buy and sell from local vendors to upgrade your ship.
+        * Upgrade your ship - Improve your ships resiliance, damage output, and even cargo capacity.
+        * Complete a Delivery Job if you have one.
+        * Store excess cargo
+
+
+3. **Accept Jobs**
+    * Accepting a job will release you from the station, and a new map will be available to explore depending on the Job accepted.
+    * Fail a job, and you will lose out on money to spend on upgrading your ship.
+
+4. **Repeat**
+    * If your ship is destroyed in flight, you will respawn at the most recent station and we will give you a basic ship.
 
 ## Game Views
 

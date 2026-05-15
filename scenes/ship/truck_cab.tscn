@@ -1,71 +1,70 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://cw8c6jlc63r1u"]
 
-[ext_resource type="Script" path="res://scenes/ship/truck_cab.gd" id="1_k8m3p"]
+[ext_resource type="Script" uid="uid://f4d3q37rtla0" path="res://scenes/ship/truck_cab.gd" id="1_k8m3p"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v4n7q"]
 size = Vector2(40, 80)
 
-[node name="TruckCab" type="RigidBody2D"]
+[node name="TruckCab" type="RigidBody2D" unique_id=1395243470]
 linear_damp = 0.05
 angular_damp = 0.1
 script = ExtResource("1_k8m3p")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=203023417]
 shape = SubResource("RectangleShape2D_v4n7q")
 
-[node name="Hull" type="ColorRect" parent="."]
+[node name="Hull" type="ColorRect" parent="." unique_id=1712485908]
 offset_left = -20.0
 offset_top = -40.0
 offset_right = 20.0
 offset_bottom = 40.0
-color = Color(1, 1, 1, 1)
 
-[node name="Flames" type="Node2D" parent="."]
+[node name="Flames" type="Node2D" parent="." unique_id=5025990]
 
-[node name="FlameRL" type="ColorRect" parent="Flames"]
-visible = false
+[node name="FlameRL" type="ColorRect" parent="Flames" unique_id=1959028438]
 offset_left = -12.0
 offset_top = 40.0
 offset_right = -8.0
 offset_bottom = 52.0
-color = Color(1, 1, 1, 1)
 
-[node name="FlameRR" type="ColorRect" parent="Flames"]
-visible = false
+[node name="FlameRR" type="ColorRect" parent="Flames" unique_id=1210047054]
 offset_left = 8.0
 offset_top = 40.0
 offset_right = 12.0
 offset_bottom = 52.0
-color = Color(1, 1, 1, 1)
 
-[node name="FlameFL" type="ColorRect" parent="Flames"]
-visible = false
+[node name="FlameFL" type="ColorRect" parent="Flames" unique_id=691730440]
 offset_left = -12.0
 offset_top = -52.0
 offset_right = -8.0
 offset_bottom = -40.0
-color = Color(1, 1, 1, 1)
 
-[node name="FlameFR" type="ColorRect" parent="Flames"]
-visible = false
+[node name="FlameFR" type="ColorRect" parent="Flames" unique_id=2029506736]
 offset_left = 8.0
 offset_top = -52.0
 offset_right = 12.0
 offset_bottom = -40.0
-color = Color(1, 1, 1, 1)
 
-[node name="FlameSFR" type="ColorRect" parent="Flames"]
-visible = false
+[node name="FlameSFR" type="ColorRect" parent="Flames" unique_id=1729003572]
 offset_left = 20.0
 offset_top = -27.0
 offset_right = 32.0
 offset_bottom = -23.0
-color = Color(1, 1, 1, 1)
 
-[node name="FlameSFL" type="ColorRect" parent="Flames"]
-visible = false
+[node name="FlameSFL" type="ColorRect" parent="Flames" unique_id=1149556404]
 offset_left = -32.0
 offset_top = -27.0
 offset_right = -20.0
 offset_bottom = -23.0
-color = Color(1, 1, 1, 1)
+
+[node name="FlameSRR" type="ColorRect" parent="Flames" unique_id=159482015]
+offset_left = 20.0
+offset_top = 27.0
+offset_right = 32.0
+offset_bottom = 31.0
+
+[node name="FlameSRL" type="ColorRect" parent="Flames" unique_id=391842263]
+offset_left = -32.0
+offset_top = 27.0
+offset_right = -20.0
+offset_bottom = 31.0

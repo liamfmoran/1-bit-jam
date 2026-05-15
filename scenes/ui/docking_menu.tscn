@@ -1,0 +1,148 @@
+[gd_scene format=3 uid="uid://b0niqiwwkwweh"]
+
+[ext_resource type="Script" uid="uid://dnsohoncdmbqh" path="res://scenes/ui/docking_menu.gd" id="1_cqq8h"]
+
+[node name="Docking_Menu" type="Control" unique_id=1179202814]
+custom_minimum_size = Vector2(1280, 720)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cqq8h")
+
+[node name="doc" type="Label" parent="." unique_id=547989013]
+visible = false
+layout_mode = 0
+offset_left = 554.0
+offset_top = 98.0
+offset_right = 753.0
+offset_bottom = 563.0
+text = "Dock with Space Stations
+
+Entering a staton docking zone will allow you to:
+
+Refuel your ship (Automatically, not paid)
+
+Buy and sell from local vendors to upgrade your ship.
+
+Upgrade your ship - Improve your ships resiliance, damage output, and even cargo capacity.
+
+Complete a Delivery Job if you have one.
+
+Store excess cargo"
+autowrap_mode = 2
+
+[node name="MenuContainer" type="HBoxContainer" parent="." unique_id=1978042552]
+custom_minimum_size = Vector2(1280, 720)
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+theme_override_constants/separation = 380
+alignment = 1
+
+[node name="Inventory" type="VBoxContainer" parent="MenuContainer" unique_id=198602516]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="InventoryLabel" type="Label" parent="MenuContainer/Inventory" unique_id=1151697250]
+layout_mode = 2
+text = "Inventory"
+horizontal_alignment = 1
+
+[node name="Panel2" type="Panel" parent="MenuContainer/Inventory" unique_id=1728813505]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="MenuContainer/Inventory/Panel2" unique_id=1849355872]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Storage"
+
+[node name="Panel3" type="Panel" parent="MenuContainer/Inventory" unique_id=2058695751]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="MenuContainer/Inventory/Panel3" unique_id=1062034684]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Ship Inventory"
+
+[node name="Panel4" type="Panel" parent="MenuContainer/Inventory" unique_id=1945340224]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="MenuContainer/Inventory/Panel4" unique_id=149734274]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Sell"
+
+[node name="Vendors" type="VBoxContainer" parent="MenuContainer" unique_id=1862089589]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="InventoryLabel" type="Label" parent="MenuContainer/Vendors" unique_id=724008459]
+layout_mode = 2
+text = "Vendors"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuContainer/Vendors" unique_id=1818282784]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Home" type="Button" parent="MenuContainer/Vendors/HBoxContainer" unique_id=291320565]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+toggle_mode = true
+keep_pressed_outside = true
+text = "Home
+(70x70)"
+
+[node name="Engineer" type="Button" parent="MenuContainer/Vendors/HBoxContainer" unique_id=1703557272]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+toggle_mode = true
+keep_pressed_outside = true
+text = "Engineer"
+
+[node name="Weapons" type="Button" parent="MenuContainer/Vendors/HBoxContainer" unique_id=444379741]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+toggle_mode = true
+keep_pressed_outside = true
+text = "Weapons"
+
+[node name="Bizarro" type="Button" parent="MenuContainer/Vendors/HBoxContainer" unique_id=1667009185]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+toggle_mode = true
+keep_pressed_outside = true
+text = "Bizarro"
+
+[node name="Panel" type="Panel" parent="MenuContainer/Vendors" unique_id=781521967]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="display_test" type="Label" parent="MenuContainer/Vendors/Panel" unique_id=1060382268]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 142.0
+offset_top = 168.0
+offset_right = 261.0
+offset_bottom = 191.0
+text = "Home"
