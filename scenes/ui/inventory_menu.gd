@@ -63,7 +63,7 @@ func _on_inventory_toggled(toggled_on: bool, item: Button) -> void:
 		_deselect_group(_shop_group)
 		_selected_item = item
 		_is_selling = true
-		action_button.text = 'Sell'
+		action_button.text = 'SELL'
 	else:
 		_selected_item = null
 
@@ -73,9 +73,10 @@ func _on_shop_toggled(toggled_on: bool, item: Button) -> void:
 		_deselect_group(_inventory_group)
 		_selected_item = item
 		_is_selling = false
-		action_button.text = 'Buy'
+		action_button.text = 'BUY'
 	else:
 		_selected_item = null
+		
 
 
 func _deselect_group(group: ButtonGroup) -> void:
@@ -95,3 +96,4 @@ func _on_action_pressed() -> void:
 		print(_shop_parts)
 		GameState.buy_part(_selected_item.item_data)
 		
+	action_button.text = ' '

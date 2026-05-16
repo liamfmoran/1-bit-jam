@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://bs7usyfiife1r"]
 
 [ext_resource type="Script" uid="uid://bie78fn3oxaxt" path="res://scenes/ui/inventory_menu.gd" id="1_n5k8r"]
+[ext_resource type="Texture2D" uid="uid://dxlbk34e2lsud" path="res://assets/ui/ninepatchtest.png" id="2_1jujj"]
+
+[sub_resource type="Theme" id="Theme_xmty8"]
 
 [node name="InventoryMenu" type="Control" unique_id=230427852]
 layout_mode = 3
@@ -9,7 +12,27 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = SubResource("Theme_xmty8")
 script = ExtResource("1_n5k8r")
+
+[node name="Background" type="NinePatchRect" parent="." unique_id=1746124541]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = -1.0
+offset_right = 2.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_1jujj")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=553347918]
 layout_mode = 1
@@ -46,15 +69,6 @@ layout_mode = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=425693839]
 layout_mode = 2
 
-[node name="ActionButton" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1386895505]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = " "
-
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer" unique_id=458407833]
-layout_mode = 2
-
 [node name="Credits" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1422042077]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
@@ -62,6 +76,15 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.2231029, 0.2231029, 0.22310287, 1)
 text = "Gold:"
 horizontal_alignment = 1
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer" unique_id=458407833]
+layout_mode = 2
+
+[node name="ActionButton" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1386895505]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = " "
 
 [node name="HSeparator2" type="HSeparator" parent="VBoxContainer" unique_id=536660667]
 layout_mode = 2

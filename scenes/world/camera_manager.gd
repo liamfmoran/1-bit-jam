@@ -12,8 +12,12 @@ extends Camera2D
 
 var _ship: Node2D
 var _zoom_tween: Tween
+var _position_tween: Tween
 var _current_rotation: float = 0.0
 var _dock_zoom_weight: float = 0.0
+var _position_offset_weight := 1.0
+
+const SHIP_OFFSET: Vector2 = Vector2(0, 200)
 
 
 func _ready() -> void:
@@ -29,7 +33,8 @@ func _physics_process(delta: float) -> void:
 	if not ship:
 		return
 
-	global_position = ship.global_position
+	var offset := SHIP_OFFSET.rotated(ship.global_rotation) * _position_offset_weight
+	global_position = ship.global_position - offset
 
 	_current_rotation = lerp_angle(_current_rotation, ship.global_rotation, rotation_smoothing * delta)
 	global_rotation = _current_rotation
@@ -44,6 +49,11 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_docked() -> void:
+	if _position_tween:
+		_position_tween.kill()
+	_position_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+	_position_tween.tween_property(self, "_position_offset_weight", 0.0, dock_zoom_duration)
+
 	if _zoom_tween:
 		_zoom_tween.kill()
 	_zoom_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
@@ -54,6 +64,11 @@ func _on_docked() -> void:
 
 
 func _on_undocked() -> void:
+	if _position_tween:
+		_position_tween.kill()
+	_position_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+	_position_tween.tween_property(self, "_position_offset_weight", 1.0, undock_zoom_duration)
+
 	if _zoom_tween:
 		_zoom_tween.kill()
 	_zoom_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)

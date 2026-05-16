@@ -1,11 +1,13 @@
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bjo1mylkwnkjg"]
 
+[ext_resource type="Texture2D" uid="uid://bglokxqmilw2b" path="res://assets/items/icons/crystal.png" id="1_11p5f"]
 [ext_resource type="Script" uid="uid://bn83rld2thelr" path="res://resources/items/item_data.gd" id="1_ns85e"]
 
 [resource]
 script = ExtResource("1_ns85e")
-display_name = "Test_Item_3"
+display_name = "GEM"
 description = "idk"
 mass = 1.0
 cost = 69
+icon = ExtResource("1_11p5f")
 metadata/_custom_type_script = "uid://bn83rld2thelr"

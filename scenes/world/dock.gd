@@ -6,6 +6,7 @@ extends Node2D
 
 @onready var left_panel: ColorRect = $Panels/LeftPanel
 @onready var right_panel: ColorRect = $Panels/RightPanel
+@onready var top_panel: ColorRect = $Panels/TopPanel
 @onready var detection_zone: Area2D = $DetectionZone
 
 const ANIM_DURATION := 0.4
@@ -24,6 +25,8 @@ func _ready() -> void:
 	detection_zone.body_exited.connect(_on_body_exited)
 	left_panel.scale.x = 0.0
 	right_panel.scale.x = 0.0
+	top_panel.scale.x=0.0
+	%StationLabel.text = "Station: " + str(dock_name)
 
 
 func _on_body_entered(body: Node2D) -> void:
@@ -32,9 +35,9 @@ func _on_body_entered(body: Node2D) -> void:
 	_docked_ship = body
 
 	body.freeze = true
-	var tween_pos : Tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	var tween_pos : Tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_LINEAR)
 	tween_pos.tween_property(body, "global_position", detection_zone.global_position, 1.0)
-	var tween_rot : Tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	var tween_rot : Tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_LINEAR)
 
 	tween_rot.tween_property(body, "global_rotation", detection_zone.global_rotation, 1.0)
 	tween_pos.finished.connect(func():
@@ -47,7 +50,6 @@ func _on_body_entered(body: Node2D) -> void:
 	_show_menus()
 	_animate_panels(true)
 
-	body._docked = true
 	
 
 
@@ -94,3 +96,4 @@ func _animate_panels(opening: bool) -> void:
 
 	_panel_tween.tween_property(left_panel, "scale:x", target_scale, ANIM_DURATION)
 	_panel_tween.tween_property(right_panel, "scale:x", target_scale, ANIM_DURATION)
+	_panel_tween.tween_property(top_panel, "scale:x", target_scale, ANIM_DURATION)

@@ -8,7 +8,8 @@ signal docked()
 signal undocked()
 signal hp_changed()
 
-var money: int = 10000
+var _is_ship_docked = false
+var money: int = 9999
 var hp: int = 100
 var active_jobs: Array[JobData] = []
 var inventory: Array[ItemData] = []
@@ -26,10 +27,12 @@ func complete_job(job: JobData) -> void:
 
 
 func dock() -> void:
+	_is_ship_docked = true
 	docked.emit()
 
 
 func undock() -> void:
+	_is_ship_docked = false
 	undocked.emit()
 
 func update_hp(val:int) -> void:

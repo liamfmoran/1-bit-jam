@@ -89,10 +89,10 @@ func _physics_process(delta: float) -> void:
 	var gimbal_target := 0.0 if braking else -turn_input * gimbal_max_angle
 	gimbal_angle = lerp(gimbal_angle, gimbal_target, gimbal_speed * delta)
 
-	if _docked and not braking and linear_velocity.length_squared()>0.1:
+	if GameState._is_ship_docked and not braking and linear_velocity.length_squared()>0.1:
 		braking = true
-	else:
-		_docked = false
+	elif GameState._is_ship_docked and Input.is_action_pressed('thrust_forward'):
+		GameState.undock()
 
 
 	if braking:

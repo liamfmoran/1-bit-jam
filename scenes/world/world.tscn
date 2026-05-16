@@ -23,6 +23,7 @@ parts_for_sale = Array[ExtResource("4_1yooq")]([ExtResource("5_gb53w"), ExtResou
 
 [node name="DockB" parent="." unique_id=175561740 instance=ExtResource("2_n7x3q")]
 position = Vector2(1195, -395)
+dock_name = 1
 parts_for_sale = Array[ExtResource("4_1yooq")]([ExtResource("5_gb53w"), ExtResource("6_5qq27")])
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1697368732]
