@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://l4v8bi4jvdaw" path="res://scenes/ui/hud.gd" id="1_jm7td"]
 [ext_resource type="Script" uid="uid://dhx3bkimwgw6c" path="res://scenes/ui/compass.gd" id="2_7k3n9"]
+[ext_resource type="Texture2D" uid="uid://buutbgprdibxt" path="res://assets/ui/compass_overlay.png" id="3_bo48s"]
 
 [node name="HUD" type="Control" unique_id=1196411326]
 layout_mode = 3
@@ -35,6 +36,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_7k3n9")
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/CompassPanel" unique_id=698304478]
+layout_mode = 0
+offset_left = -5.0
+offset_top = 5.0
+offset_right = 404.6
+offset_bottom = 21.0
+texture = ExtResource("3_bo48s")
+expand_mode = 1
 
 [node name="MainDegree" type="Label" parent="VBoxContainer" unique_id=1545618763]
 unique_name_in_owner = true

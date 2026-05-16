@@ -52,7 +52,7 @@ offset_top = -206.0
 offset_right = 120.0
 offset_bottom = -160.0
 pivot_offset = Vector2(240, 0)
-color = Color(1, 1, 1, 0)
+color = Color(1, 1, 1, 0.4745098)
 
 [node name="StationLabel" type="Label" parent="Panels/TopPanel" unique_id=599261730]
 unique_name_in_owner = true
@@ -62,6 +62,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "STATION: DELTA"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "STATION: DELTA
+"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Label" type="Label" parent="Panels/TopPanel" unique_id=1210664159]
+layout_mode = 0
+offset_left = 81.0
+offset_top = 28.0
+offset_right = 199.0
+offset_bottom = 51.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 11
+text = "[w] to head out"
