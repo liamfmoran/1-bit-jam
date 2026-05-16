@@ -1,9 +1,5 @@
 extends Node2D
 
-@export var dock_name: WorldData.Stations
-@export var jobs: Array[JobData] = []
-@export var parts_for_sale: Array[ItemData] = []
-
 @onready var left_panel: ColorRect = $Panels/LeftPanel
 @onready var right_panel: ColorRect = $Panels/RightPanel
 @onready var top_panel: ColorRect = $Panels/TopPanel
@@ -17,6 +13,12 @@ var _panel_tween: Tween
 var _docked_ship: RigidBody2D
 var _jobs_instance: Control
 var _inventory_instance: Control
+var _station: StationData
+
+
+func setup(station: StationData) -> void:
+	_station = station
+	%StationLabel.text = "Station: " + station.display_name
 
 
 func _ready() -> void:
@@ -25,8 +27,7 @@ func _ready() -> void:
 	detection_zone.body_exited.connect(_on_body_exited)
 	left_panel.scale.x = 0.0
 	right_panel.scale.x = 0.0
-	top_panel.scale.x=0.0
-	%StationLabel.text = "Station: " + str(dock_name)
+	top_panel.scale.x = 0.0
 
 
 func _on_body_entered(body: Node2D) -> void:
@@ -38,17 +39,15 @@ func _on_body_entered(body: Node2D) -> void:
 	var tween_pos : Tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_LINEAR)
 	tween_pos.tween_property(body, "global_position", detection_zone.global_position, 1.0)
 	var tween_rot : Tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_LINEAR)
-
 	tween_rot.tween_property(body, "global_rotation", detection_zone.global_rotation, 1.0)
 	tween_pos.finished.connect(func():
 		body.freeze = false
+		if _station:
+			GameState.complete_delivery(_station.id)
 		GameState.dock()
+		_show_menus()
+		_animate_panels(true)
 	)
-
-	GameState.complete_delivery(dock_name)
-	GameState.dock()
-	_show_menus()
-	_animate_panels(true)
 
 	
 
@@ -66,12 +65,14 @@ func _show_menus() -> void:
 	_jobs_instance = JOBS_MENU.instantiate()
 	_jobs_instance.set_anchors_preset(Control.PRESET_FULL_RECT)
 	left_panel.add_child(_jobs_instance)
-	_jobs_instance.set_jobs(jobs)
+	if _station:
+		_jobs_instance.set_jobs(_station.jobs)
 
 	_inventory_instance = INVENTORY_MENU.instantiate()
 	_inventory_instance.set_anchors_preset(Control.PRESET_FULL_RECT)
 	right_panel.add_child(_inventory_instance)
-	_inventory_instance.set_parts(parts_for_sale)
+	if _station:
+		_inventory_instance.set_parts(_station.items_for_sale)
 
 
 func _hide_menus() -> void:

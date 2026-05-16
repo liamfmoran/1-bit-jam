@@ -1,0 +1,27 @@
+{
+	"jobs": [
+		{
+			"id": "first_day",
+			"display_name": "First Day",
+			"description": "Need someone to deliver thrusters, you up for the challenge?",
+			"type": "DELIVERY",
+			"money_reward": 100,
+			"faction_reward": 1,
+			"origin": "ALPHA",
+			"destination": "BETA",
+			"cargo": []
+		},
+		{
+			"id": "forgot_wallet",
+			"display_name": "Forgot my Wallet",
+			"description": "Can you check out this area in space? I think I lost my Wallet there.",
+			"type": "FETCH",
+			"money_reward": 100,
+			"faction_reward": 1,
+			"origin": "BETA",
+			"destination": "",
+			"fetch_coordinate": [ 100, 100 ],
+			"cargo": []
+		}
+	]
+}

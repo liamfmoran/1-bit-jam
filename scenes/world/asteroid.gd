@@ -1,6 +1,6 @@
 extends RigidBody2D
 
-const MAX_DIST: float = 2500.0
+const MAX_DIST: float = 4500.0
 
 var radius: float = 16.0
 var _ship: Node2D

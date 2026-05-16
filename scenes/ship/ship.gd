@@ -1,4 +1,4 @@
-extends RigidBody2D
+extends BaseShip
 
 @export var rear_thrust_force: float = 120000.0
 @export var front_thrust_force: float = 100000.0
@@ -48,7 +48,9 @@ var _docked: bool
 
 
 func _ready() -> void:
+	super._ready()
 	add_to_group("player")
+	WorldData.track_ship(self, &"player")
 	var mat := ShaderMaterial.new()
 	mat.shader = SHIP_SHADER
 	$Hull.material = mat

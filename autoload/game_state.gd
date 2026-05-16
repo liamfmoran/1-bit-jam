@@ -56,10 +56,11 @@ func sell_part(part: ItemData) -> void:
 	inventory_changed.emit()
 
 
-func complete_delivery(dock_name: WorldData.Stations) -> void:
+func complete_delivery(dock_name: String) -> void:
 	var completed := []
 	for job in active_jobs:
-		if job.destination == dock_name:
+		var delivery := job as DeliveryJobData
+		if delivery and delivery.destination != null and delivery.destination.id == dock_name:
 			completed.append(job)
 	for job in completed:
 		complete_job(job)

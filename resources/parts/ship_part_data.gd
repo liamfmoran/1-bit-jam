@@ -3,9 +3,7 @@ extends Resource
 
 #in the future we change this to extend item data
 
-@export var part_name: StringName
-@export var slot_type: StringName
-@export var stats: Dictionary = {}
+@export var display_name: StringName
 @export var mass: float = 0.0
 @export var cost: int = 0
 @export var icon: Texture2D

@@ -1,0 +1,33 @@
+{
+	"ship_parts": [
+		{
+			"id": "example_ship_part_a",
+			"display_name": "Example Ship Part A",
+			"slot_type": "thruster",
+			"stats": {},
+			"mass": 1.0,
+			"cost": 50
+		},
+		{
+			"id": "example_ship_part_b",
+			"display_name": "Example Ship Part B",
+			"slot_type": "shield",
+			"stats": {},
+			"mass": 2.0,
+			"cost": 100
+		},
+		{
+			"id": "turret_basic",
+			"display_name": "Basic Turret",
+			"slot_type": "turret",
+			"stats": {
+				"bullet_speed": 520.0,
+				"damage": 15.0,
+				"fire_rate": 1.5,
+				"range": 320.0
+			},
+			"mass": 0.1,
+			"cost": 200
+		}
+	]
+}

@@ -1,0 +1,81 @@
+{
+	"zones": [
+		{
+			"id": "dock_alpha",
+			"display_name": "Alpha Station",
+			"position": [0, -600],
+			"radius": 350,
+			"falloff": 250,
+			"spawners": [
+				{ "type": "dock", "dock_id": "ALPHA" }
+			]
+		},
+		{
+			"id": "dock_beta",
+			"display_name": "Beta Station",
+			"position": [0, -5000],
+			"radius": 350,
+			"falloff": 250,
+			"spawners": [
+				{ "type": "dock", "dock_id": "BETA" }
+			]
+		},
+		{
+			"id": "beta_guards",
+			"position": [0, -5900],
+			"radius": 700,
+			"falloff": 400,
+			"spawners": [
+				{ "type": "enemies", "count": 3, "patrol_radius": 500 }
+			]
+		},
+		{
+			"id": "crossing_belt",
+			"position": [0, -2800],
+			"radius": 1500,
+			"falloff": 500,
+			"spawners": [
+				{ "type": "asteroid_belt", "speed": 420, "max_count": 140, "width": 900, "direction": [1, 0] }
+			]
+		},
+		{
+			"id": "outer_belt",
+			"position": [6000, 0],
+			"radius": 1800,
+			"falloff": 900,
+			"spawners": [
+				{ "type": "asteroids", "max_count": 28, "density": 0.9 },
+				{ "type": "enemies", "count": 3, "patrol_radius": 1000 }
+			]
+		},
+		{
+			"id": "debris_run",
+			"position": [2500, -3000],
+			"radius": 900,
+			"falloff": 500,
+			"spawners": [
+				{ "type": "asteroids", "max_count": 12, "density": 0.5 },
+				{ "type": "salvage", "count": 6 }
+			]
+		},
+		{
+			"id": "black_hole",
+			"display_name": "The Maw",
+			"position": [9500, -2500],
+			"radius": 600,
+			"falloff": 800,
+			"spawners": [
+				{ "type": "black_hole", "pull_strength": 800.0 }
+			]
+		},
+		{
+			"id": "patrol_lane",
+			"position": [3800, 2200],
+			"radius": 1000,
+			"falloff": 600,
+			"spawners": [
+				{ "type": "enemies", "count": 4, "patrol_radius": 700 }
+			]
+		}
+	]
+}

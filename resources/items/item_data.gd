@@ -5,6 +5,4 @@ extends Resource
 @export var description: String
 @export var mass: float = 0.0
 @export var cost: int = 0
-@export var sell_value: int = 0
 @export var icon: Texture2D
-@export var is_part: bool
