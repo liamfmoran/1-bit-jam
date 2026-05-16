@@ -1,9 +1,5 @@
 extends Node2D
 
-@export var dock_name: WorldData.Stations
-@export var jobs: Array[JobData] = []
-@export var parts_for_sale: Array[ItemData] = []
-
 @onready var left_panel: ColorRect = $Panels/LeftPanel
 @onready var right_panel: ColorRect = $Panels/RightPanel
 @onready var detection_zone: Area2D = $DetectionZone
@@ -16,6 +12,11 @@ var _panel_tween: Tween
 var _docked_ship: RigidBody2D
 var _jobs_instance: Control
 var _inventory_instance: Control
+var _station: StationData
+
+
+func setup(station: StationData) -> void:
+	_station = station
 
 
 func _ready() -> void:
@@ -30,7 +31,8 @@ func _on_body_entered(body: Node2D) -> void:
 	if _docked_ship or not body.is_in_group("player"):
 		return
 	_docked_ship = body
-	GameState.complete_delivery(dock_name)
+	if _station:
+		GameState.complete_delivery(_station.id)
 	GameState.dock()
 	_show_menus()
 	_animate_panels(true)
@@ -49,12 +51,14 @@ func _show_menus() -> void:
 	_jobs_instance = JOBS_MENU.instantiate()
 	_jobs_instance.set_anchors_preset(Control.PRESET_FULL_RECT)
 	left_panel.add_child(_jobs_instance)
-	_jobs_instance.set_jobs(jobs)
+	if _station:
+		_jobs_instance.set_jobs(_station.jobs)
 
 	_inventory_instance = INVENTORY_MENU.instantiate()
 	_inventory_instance.set_anchors_preset(Control.PRESET_FULL_RECT)
 	right_panel.add_child(_inventory_instance)
-	_inventory_instance.set_parts(parts_for_sale)
+	if _station:
+		_inventory_instance.set_parts(_station.items_for_sale)
 
 
 func _hide_menus() -> void:

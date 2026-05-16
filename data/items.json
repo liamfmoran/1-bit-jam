@@ -1,0 +1,18 @@
+{
+	"items": [
+		{
+			"id": "test_item_1",
+			"display_name": "Test Item 1",
+			"description": "idk",
+			"mass": 1.0,
+			"cost": 30
+		},
+		{
+			"id": "test_item_2",
+			"display_name": "Test Item 2",
+			"description": "idk",
+			"mass": 1.0,
+			"cost": 420
+		}
+	]
+}

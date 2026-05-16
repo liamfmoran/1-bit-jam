@@ -1,0 +1,24 @@
+{
+	"stations": [
+		{
+			"id": "ALPHA",
+			"display_name": "Alpha Station",
+			"jobs": [
+				"first_day"
+			],
+			"items_for_sale": [
+				"test_item_1"
+			]
+		},
+		{
+			"id": "BETA",
+			"display_name": "Beta Station",
+			"jobs": [
+				"forgot_wallet"
+			],
+			"items_for_sale": [
+				"test_item_2"
+			]
+		}
+	]
+}

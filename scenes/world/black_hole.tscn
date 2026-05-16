@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/world/black_hole.gd" id="1_b4k7m"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_p9w3n"]
+radius = 900.0
+
+[node name="BlackHole" type="Node2D"]
+script = ExtResource("1_b4k7m")
+
+[node name="GravityArea" type="Area2D" parent="."]
+
+[node name="GravityShape" type="CollisionShape2D" parent="GravityArea"]
+shape = SubResource("CircleShape2D_p9w3n")
+
+[node name="Visual" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(50, 0, 43.3, 25, 25, 43.3, 0, 50, -25, 43.3, -43.3, 25, -50, 0, -43.3, -25, -25, -43.3, 0, -50, 25, -43.3, 43.3, -25)

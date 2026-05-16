@@ -3,14 +3,6 @@ extends Control
 const MAP_SIZE := Vector2(150, 150)
 const WORLD_RANGE := 4000.0
 
-var _player: Node2D
-var _docks: Array[Node]
-
-
-func _ready() -> void:
-	_player = get_tree().get_first_node_in_group("player") as Node2D
-	_docks = get_tree().get_nodes_in_group("dock")
-
 
 func _process(_delta: float) -> void:
 	queue_redraw()
@@ -20,28 +12,47 @@ func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, MAP_SIZE), Color(0, 0, 0, 0.5))
 	draw_rect(Rect2(Vector2.ZERO, MAP_SIZE), Color.WHITE, false, 2.0)
 
-	if not is_instance_valid(_player):
-		_player = get_tree().get_first_node_in_group("player") as Node2D
-	if not _player:
+	var player_world_pos: Variant = _find_player_pos()
+	if player_world_pos == null:
 		return
-	var center: Vector2 = _player.global_position
+	var center: Vector2 = player_world_pos
 
-	for dock in _docks:
-		if not is_instance_valid(dock):
-			continue
-		var pos := _world_to_map(dock.global_position, center)
+	_draw_docks(center)
+	_draw_ships(center)
+
+
+func _find_player_pos() -> Variant:
+	for entry: WorldData.ShipEntry in WorldData.get_ships():
+		if is_instance_valid(entry.node) and entry.kind == &"player":
+			return entry.node.global_position
+	return null
+
+
+func _draw_docks(center: Vector2) -> void:
+	for station: StationData in WorldData.stations.values():
+		var pos := _world_to_map(station.position, center)
 		if _in_bounds(pos):
 			draw_rect(Rect2(pos - Vector2(4, 4), Vector2(8, 8)), Color.WHITE)
 
-	var player_pos := MAP_SIZE / 2.0
-	var rot: float = _player.global_rotation
-	var tri_size := 6.0
-	var points := PackedVector2Array([
-		player_pos + Vector2(0, -tri_size).rotated(rot),
-		player_pos + Vector2(-tri_size * 0.6, tri_size * 0.5).rotated(rot),
-		player_pos + Vector2(tri_size * 0.6, tri_size * 0.5).rotated(rot),
-	])
-	draw_colored_polygon(points, Color.WHITE)
+
+func _draw_ships(center: Vector2) -> void:
+	for entry: WorldData.ShipEntry in WorldData.get_ships():
+		if not is_instance_valid(entry.node):
+			continue
+		var map_pos := _world_to_map(entry.node.global_position, center)
+		if not _in_bounds(map_pos):
+			continue
+		match entry.kind:
+			&"player":
+				var tri := 6.0
+				var rot := entry.node.global_rotation
+				draw_colored_polygon(PackedVector2Array([
+					map_pos + Vector2(0, -tri).rotated(rot),
+					map_pos + Vector2(-tri * 0.6, tri * 0.5).rotated(rot),
+					map_pos + Vector2(tri * 0.6, tri * 0.5).rotated(rot),
+				]), Color.WHITE)
+			&"enemy":
+				draw_rect(Rect2(map_pos - Vector2(3, 3), Vector2(6, 6)), Color.WHITE, false, 1.5)
 
 
 func _world_to_map(world_pos: Vector2, center: Vector2) -> Vector2:
