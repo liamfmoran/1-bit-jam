@@ -4,11 +4,7 @@ const ITEM_SCENE = preload("res://scenes/ui/item.tscn")
 
 @onready var inventory_list: VBoxContainer = %InventoryList
 @onready var shop_list: VBoxContainer = %ShopList
-@onready var buy_button: Button = $BuyMenu/ActionButton
-@onready var sell_button: Button = $SellMenu/ActionButton
-@onready var _home: Control = $Home
-@onready var _buy_menu: Control = $BuyMenu
-@onready var _sell_menu: Control = $SellMenu
+@onready var action_button: Button = %ActionButton
 
 var _inventory_group: ButtonGroup
 var _shop_group: ButtonGroup
@@ -20,13 +16,9 @@ var _shop_parts: Array[ItemData] = []
 func _ready() -> void:
 	_inventory_group = ButtonGroup.new()
 	_shop_group = ButtonGroup.new()
-	buy_button.pressed.connect(_on_action_pressed)
-	sell_button.pressed.connect(_on_action_pressed)
-	buy_button.disabled = true
-	sell_button.disabled = true
+	action_button.pressed.connect(_on_action_pressed)
 	GameState.inventory_changed.connect(_refresh)
 	_refresh()
-	show_home()
 
 
 func set_parts(parts: Array[ItemData]) -> void:
@@ -37,11 +29,9 @@ func set_parts(parts: Array[ItemData]) -> void:
 func _refresh() -> void:
 	_selected_item = null
 	_is_selling = false
-	buy_button.disabled = true
-	sell_button.disabled = true
 	_populate_inventory()
-	if not _shop_parts.is_empty():
-		_populate_shop()
+	%Credits.text = str(GameState.money) + ' c'
+	_populate_shop()
 
 
 func _populate_inventory() -> void:
@@ -73,11 +63,9 @@ func _on_inventory_toggled(toggled_on: bool, item: Button) -> void:
 		_deselect_group(_shop_group)
 		_selected_item = item
 		_is_selling = true
-		sell_button.text = "Sell %s" % item.item_data.display_name
-		sell_button.disabled = false
+		action_button.text = 'Sell'
 	else:
 		_selected_item = null
-		sell_button.disabled = true
 
 
 func _on_shop_toggled(toggled_on: bool, item: Button) -> void:
@@ -85,11 +73,9 @@ func _on_shop_toggled(toggled_on: bool, item: Button) -> void:
 		_deselect_group(_inventory_group)
 		_selected_item = item
 		_is_selling = false
-		buy_button.text = "Buy"
-		buy_button.disabled = false
+		action_button.text = 'Buy'
 	else:
 		_selected_item = null
-		buy_button.disabled = true
 
 
 func _deselect_group(group: ButtonGroup) -> void:
@@ -105,35 +91,7 @@ func _on_action_pressed() -> void:
 	if _is_selling:
 		GameState.sell_part(_selected_item.item_data)
 	else:
+		_shop_parts.erase(_selected_item.item_data)
+		print(_shop_parts)
 		GameState.buy_part(_selected_item.item_data)
-
-
-func show_buy():
-	_home.visible = false
-	_buy_menu.visible = true
-	_sell_menu.visible = false
-
-
-func show_sell():
-	_home.visible = false
-	_buy_menu.visible = false
-	_sell_menu.visible = true
-	_populate_inventory()
-
-
-func show_home():
-	_home.visible = true
-	_buy_menu.visible = false
-	_sell_menu.visible = false
-
-
-func _on_buy_button_button_down():
-	show_buy()
-
-
-func _on_back_button_button_down():
-	show_home()
-
-
-func _on_sell_button_button_down():
-	show_sell()
+		

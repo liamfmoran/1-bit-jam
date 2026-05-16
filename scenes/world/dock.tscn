@@ -21,9 +21,19 @@ width = 2.0
 [node name="DetectionShape" type="CollisionShape2D" parent="DetectionZone" unique_id=1754069099]
 shape = SubResource("RectangleShape2D_m4w9j")
 
+[node name="ColorRect" type="ColorRect" parent="." unique_id=586123754]
+z_index = -1
+offset_left = -461.0
+offset_top = -255.0
+offset_right = 439.0
+offset_bottom = 242.0
+mouse_filter = 2
+color = Color(0.50534403, 0.5053441, 0.50534403, 1)
+
 [node name="Panels" type="Node2D" parent="." unique_id=1362702286]
 
 [node name="LeftPanel" type="ColorRect" parent="Panels" unique_id=1058903222]
+clip_contents = true
 offset_left = -380.0
 offset_top = -200.0
 offset_right = -140.0
@@ -31,6 +41,7 @@ offset_bottom = 200.0
 pivot_offset = Vector2(240, 0)
 
 [node name="RightPanel" type="ColorRect" parent="Panels" unique_id=749663073]
+clip_contents = true
 offset_left = 140.0
 offset_top = -200.0
 offset_right = 380.0
