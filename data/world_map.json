@@ -34,6 +34,7 @@
 			"position": [0, -2800],
 			"radius": 1500,
 			"falloff": 500,
+			"line_direction": [1, 0],
 			"spawners": [
 				{ "type": "asteroid_belt", "speed": 420, "max_count": 140, "width": 900, "direction": [1, 0] }
 			]

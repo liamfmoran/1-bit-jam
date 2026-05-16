@@ -42,12 +42,19 @@ func _process_zone_list(zone_list: Array) -> void:
 	for zone_data: ZoneData in zone_list:
 		var activation_dist := zone_data.radius + zone_data.falloff + SHIP_SPEED_BUFFER
 		var deactivation_dist := activation_dist + DEACTIVATION_EXTRA
-		var dist := _ship.global_position.distance_to(zone_data.position)
+		var dist := _distance_to_zone(zone_data)
 
 		if dist <= activation_dist and not _active_zones.has(zone_data.id):
 			_load_zone(zone_data)
 		elif dist > deactivation_dist and _active_zones.has(zone_data.id):
 			_unload_zone(zone_data.id)
+
+func _distance_to_zone(zone_data: ZoneData) -> float:
+	if zone_data.line_direction != Vector2.ZERO:
+		var offset := _ship.global_position - zone_data.position
+		var along := offset.dot(zone_data.line_direction)
+		return (offset - zone_data.line_direction * along).length()
+	return _ship.global_position.distance_to(zone_data.position)
 
 func _load_zone(zone_data: ZoneData) -> void:
 	var zone := ZoneNode.new()

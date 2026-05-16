@@ -7,3 +7,5 @@ extends Resource
 @export var radius: float
 @export var falloff: float
 @export var spawners: Array[SpawnerConfig]
+# When non-zero, WorldStreamer uses perpendicular distance to this line instead of radial distance.
+@export var line_direction: Vector2 = Vector2.ZERO

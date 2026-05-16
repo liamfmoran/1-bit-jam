@@ -38,8 +38,10 @@ func _physics_process(_delta: float) -> void:
 		var rb := ast as RigidBody2D
 		rb.linear_velocity = _dir * _speed
 		var ast_along: float = (ast.global_position - zone_center).dot(_dir)
-		if ast_along > player_along + OFFSCREEN_BUFFER or ast_along < player_along - OFFSCREEN_BUFFER:
-			_recycle(ast, zone_center, player_along)
+		if ast_along > player_along + OFFSCREEN_BUFFER:
+			_recycle(ast, zone_center, player_along, true)
+		elif ast_along < player_along - OFFSCREEN_BUFFER:
+			_recycle(ast, zone_center, player_along, false)
 
 	var deficit := mini(_config.max_count - _asteroids.size(), 5)
 	for i in deficit:
@@ -56,9 +58,13 @@ func _populate_initial() -> void:
 			continue
 		_asteroids.append(_place_asteroid(spawn_pos))
 
-func _recycle(ast: Node, zone_center: Vector2, player_along: float) -> void:
-	var upstream := player_along - OFFSCREEN_BUFFER + randf_range(0.0, 50.0)
-	ast.global_position = zone_center + _dir * upstream + _perp * _sample_width()
+func _recycle(ast: Node, zone_center: Vector2, player_along: float, exited_front: bool) -> void:
+	var target_along: float
+	if exited_front:
+		target_along = player_along - OFFSCREEN_BUFFER + randf_range(0.0, 50.0)
+	else:
+		target_along = player_along + OFFSCREEN_BUFFER - randf_range(0.0, 50.0)
+	ast.global_position = zone_center + _dir * target_along + _perp * _sample_width()
 	(ast as RigidBody2D).linear_velocity = _dir * _speed
 
 func _spawn_new(zone_center: Vector2, player_along: float) -> void:
