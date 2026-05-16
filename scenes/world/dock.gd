@@ -31,7 +31,7 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	_docked_ship = body
 	GameState.complete_delivery(dock_name)
-	GameState.docked.emit()
+	GameState.dock()
 	_show_menus()
 	_animate_panels(true)
 
@@ -40,7 +40,7 @@ func _on_body_exited(body: Node2D) -> void:
 	if body != _docked_ship:
 		return
 	_docked_ship = null
-	GameState.undocked.emit()
+	GameState.undock()
 	_hide_menus()
 	_animate_panels(false)
 

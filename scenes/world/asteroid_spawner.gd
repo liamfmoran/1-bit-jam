@@ -18,6 +18,8 @@ func _ready() -> void:
 		ship = get_tree().get_first_node_in_group("player") as Node2D
 	if not hazard_manager:
 		hazard_manager = get_node_or_null("../HazardManager")
+		if not hazard_manager:
+			push_warning("AsteroidSpawner: HazardManager not found — assign it in the editor.")
 	var timer := Timer.new()
 	timer.wait_time = spawn_interval
 	timer.autostart = true

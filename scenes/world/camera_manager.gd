@@ -34,7 +34,7 @@ func _physics_process(delta: float) -> void:
 	_current_rotation = lerp_angle(_current_rotation, ship.global_rotation, rotation_smoothing * delta)
 	global_rotation = _current_rotation
 
-	var speed := (ship as RigidBody2D).linear_velocity.length()
+	var speed := (ship as RigidBody2D).linear_velocity.length() if ship is RigidBody2D else 0.0
 	var base_zoom_target := clampf(zoom_max - speed * zoom_speed_factor, zoom_min, zoom_max)
 	var dock_zoom_factor := lerpf(1.0, _get_dock_zoom_multiplier(), _dock_zoom_weight)
 	var target_zoom := clampf(base_zoom_target * dock_zoom_factor, zoom_min, dock_zoom)

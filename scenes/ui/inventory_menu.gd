@@ -6,6 +6,9 @@ const ITEM_SCENE = preload("res://scenes/ui/item.tscn")
 @onready var shop_list: VBoxContainer = %ShopList
 @onready var buy_button: Button = $BuyMenu/ActionButton
 @onready var sell_button: Button = $SellMenu/ActionButton
+@onready var _home: Control = $Home
+@onready var _buy_menu: Control = $BuyMenu
+@onready var _sell_menu: Control = $SellMenu
 
 var _inventory_group: ButtonGroup
 var _shop_group: ButtonGroup
@@ -106,22 +109,22 @@ func _on_action_pressed() -> void:
 
 
 func show_buy():
-	$Home.visible = false
-	$BuyMenu.visible = true
-	$SellMenu.visible = false
+	_home.visible = false
+	_buy_menu.visible = true
+	_sell_menu.visible = false
 
 
 func show_sell():
-	$Home.visible = false
-	$BuyMenu.visible = false
-	$SellMenu.visible = true
+	_home.visible = false
+	_buy_menu.visible = false
+	_sell_menu.visible = true
 	_populate_inventory()
 
 
 func show_home():
-	$Home.visible = true
-	$BuyMenu.visible = false
-	$SellMenu.visible = false
+	_home.visible = true
+	_buy_menu.visible = false
+	_sell_menu.visible = false
 
 
 func _on_buy_button_button_down():

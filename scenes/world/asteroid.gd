@@ -19,7 +19,7 @@ func setup(r: float, ship: Node2D) -> void:
 	var shape := CircleShape2D.new()
 	shape.radius = radius
 	$CollisionShape2D.shape = shape
-	mass = (4.0 / 3.0) * PI * radius * radius * radius * DENSITY
+	mass = PI * radius * radius * DENSITY
 
 	if not _shared_tex:
 		var img := Image.create(1, 1, false, Image.FORMAT_RGBA8)

@@ -3,6 +3,14 @@ extends Control
 const MAP_SIZE := Vector2(150, 150)
 const WORLD_RANGE := 4000.0
 
+var _player: Node2D
+var _docks: Array[Node]
+
+
+func _ready() -> void:
+	_player = get_tree().get_first_node_in_group("player") as Node2D
+	_docks = get_tree().get_nodes_in_group("dock")
+
 
 func _process(_delta: float) -> void:
 	queue_redraw()
@@ -12,18 +20,21 @@ func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, MAP_SIZE), Color(0, 0, 0, 0.5))
 	draw_rect(Rect2(Vector2.ZERO, MAP_SIZE), Color.WHITE, false, 2.0)
 
-	var player: Node2D = get_tree().get_first_node_in_group("player") as Node2D
-	if not player:
+	if not is_instance_valid(_player):
+		_player = get_tree().get_first_node_in_group("player") as Node2D
+	if not _player:
 		return
-	var center: Vector2 = player.global_position
+	var center: Vector2 = _player.global_position
 
-	for dock in get_tree().get_nodes_in_group("dock"):
+	for dock in _docks:
+		if not is_instance_valid(dock):
+			continue
 		var pos := _world_to_map(dock.global_position, center)
 		if _in_bounds(pos):
 			draw_rect(Rect2(pos - Vector2(4, 4), Vector2(8, 8)), Color.WHITE)
 
 	var player_pos := MAP_SIZE / 2.0
-	var rot: float = player.global_rotation
+	var rot: float = _player.global_rotation
 	var tri_size := 6.0
 	var points := PackedVector2Array([
 		player_pos + Vector2(0, -tri_size).rotated(rot),

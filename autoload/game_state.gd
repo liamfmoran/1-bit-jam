@@ -8,11 +8,6 @@ signal docked()
 signal undocked()
 
 var money: int = 10000
-var placed_items: Array[Dictionary] = []
-var equipped_parts: Dictionary = {}
-var cab_grid_size: Vector2i = Vector2i(6, 10)
-var trailer_grid_sizes: Array[Vector2i] = []
-var total_cargo_mass: float = 0.0
 var active_jobs: Array[JobData] = []
 var inventory: Array[ItemData] = []
 
@@ -28,7 +23,15 @@ func complete_job(job: JobData) -> void:
 	jobs_changed.emit()
 
 
-func buy_part(part: Resource) -> void:
+func dock() -> void:
+	docked.emit()
+
+
+func undock() -> void:
+	undocked.emit()
+
+
+func buy_part(part: ItemData) -> void:
 	if money >= part.cost:
 		money -= part.cost
 		inventory.append(part)
@@ -36,7 +39,7 @@ func buy_part(part: Resource) -> void:
 		inventory_changed.emit()
 
 
-func sell_part(part: Resource) -> void:
+func sell_part(part: ItemData) -> void:
 	if part not in inventory:
 		return
 	inventory.erase(part)
