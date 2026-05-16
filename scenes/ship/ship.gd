@@ -44,6 +44,7 @@ const SHIP_SHADER := preload("res://shaders/ship.gdshader")
 var gimbal_angle: float = 0.0
 var _hull_mat: ShaderMaterial
 var _thrusters: ThrusterVisuals
+var _docked: bool
 
 
 func _ready() -> void:
@@ -86,6 +87,12 @@ func _physics_process(delta: float) -> void:
 
 	var gimbal_target := 0.0 if braking else -turn_input * gimbal_max_angle
 	gimbal_angle = lerp(gimbal_angle, gimbal_target, gimbal_speed * delta)
+
+	if _docked and not braking and linear_velocity.length_squared()>0.1:
+		braking = true
+	else:
+		_docked = false
+
 
 	if braking:
 		_brake(forward_dir, turn_input)
@@ -130,6 +137,7 @@ func _physics_process(delta: float) -> void:
 
 	_update_flames(thrusting_forward, thrusting_reverse, fire_left, fire_right, stab_f / stabilizer_force)
 
+	
 
 func _apply_lateral_rcs() -> void:
 	var lat_spd := transform.x.dot(linear_velocity)

@@ -30,10 +30,25 @@ func _on_body_entered(body: Node2D) -> void:
 	if _docked_ship or not body.is_in_group("player"):
 		return
 	_docked_ship = body
+
+	body.freeze = true
+	var tween_pos : Tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	tween_pos.tween_property(body, "global_position", detection_zone.global_position, 1.0)
+	var tween_rot : Tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+
+	tween_rot.tween_property(body, "global_rotation", detection_zone.global_rotation, 1.0)
+	tween_pos.finished.connect(func():
+		body.freeze = false
+		GameState.dock()
+	)
+
 	GameState.complete_delivery(dock_name)
 	GameState.dock()
 	_show_menus()
 	_animate_panels(true)
+
+	body._docked = true
+	
 
 
 func _on_body_exited(body: Node2D) -> void:

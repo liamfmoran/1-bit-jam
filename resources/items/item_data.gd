@@ -6,3 +6,4 @@ extends Resource
 @export var mass: float = 0.0
 @export var cost: int = 0
 @export var icon: Texture2D
+@export var is_part: bool

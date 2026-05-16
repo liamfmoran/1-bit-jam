@@ -35,6 +35,7 @@ size_flags_vertical = 3
 
 [node name="ShopList" type="VBoxContainer" parent="VBoxContainer/ShopScroll" unique_id=1768939811]
 unique_name_in_owner = true
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -77,6 +78,7 @@ size_flags_vertical = 3
 
 [node name="InventoryList" type="VBoxContainer" parent="VBoxContainer/InventoryScroll" unique_id=2041037934]
 unique_name_in_owner = true
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
