@@ -1,45 +1,52 @@
 [gd_scene format=3 uid="uid://dekrpom6andu2"]
 
 [ext_resource type="Script" uid="uid://buk5u5rcjq0bo" path="res://scenes/main.gd" id="1_a3k7m"]
-[ext_resource type="PackedScene" path="res://scenes/world/world.tscn" id="2_p5v8n"]
+[ext_resource type="PackedScene" uid="uid://dy27d52f6yvl7" path="res://scenes/world/world.tscn" id="2_p5v8n"]
 [ext_resource type="PackedScene" path="res://scenes/ui/minimap.tscn" id="3_b2n6x"]
 [ext_resource type="Script" uid="uid://708ycscidli0" path="res://scenes/effects/starfield.gd" id="4_m6k3x"]
-[ext_resource type="Shader" path="res://shaders/starfield.gdshader" id="5_v9n2p"]
-[ext_resource type="Shader" path="res://shaders/onebit_post.gdshader" id="6_n4k8r"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_r4w8t"]
-shader = ExtResource("5_v9n2p")
+[ext_resource type="Shader" uid="uid://cwiwph1j2y2r8" path="res://shaders/starfield.gdshader" id="5_v9n2p"]
+[ext_resource type="Shader" uid="uid://w1j61wlqsv1t" path="res://shaders/onebit_post.gdshader" id="6_n4k8r"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_p9k2m"]
 shader = ExtResource("6_n4k8r")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r4w8t"]
+shader = ExtResource("5_v9n2p")
+shader_parameter/ship_position = Vector2(0, 0)
+shader_parameter/ship_velocity = Vector2(0, 0)
+shader_parameter/camera_rotation = 0.0
+
 [node name="Main" type="Node2D" unique_id=1111864905]
 script = ExtResource("1_a3k7m")
 
-[node name="World" parent="." instance=ExtResource("2_p5v8n")]
+[node name="World" parent="." unique_id=102097468 instance=ExtResource("2_p5v8n")]
 
-[node name="PostProcessLayer" type="CanvasLayer" parent="."]
+[node name="PostProcessLayer" type="CanvasLayer" parent="." unique_id=1923292393]
 layer = 2
 
-[node name="OneBitPost" type="ColorRect" parent="PostProcessLayer"]
+[node name="OneBitPost" type="ColorRect" parent="PostProcessLayer" unique_id=102847593]
+material = SubResource("ShaderMaterial_p9k2m")
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-material = SubResource("ShaderMaterial_p9k2m")
+mouse_filter = 2
 
-[node name="StarfieldLayer" type="CanvasLayer" parent="."]
+[node name="StarfieldLayer" type="CanvasLayer" parent="." unique_id=414254171]
 layer = -1
 
-[node name="Starfield" type="ColorRect" parent="StarfieldLayer"]
+[node name="Starfield" type="ColorRect" parent="StarfieldLayer" unique_id=968511431]
+material = SubResource("ShaderMaterial_r4w8t")
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-material = SubResource("ShaderMaterial_r4w8t")
 script = ExtResource("4_m6k3x")
 
-[node name="HUD" type="CanvasLayer" parent="."]
+[node name="HUD" type="CanvasLayer" parent="." unique_id=724785266]
 layer = 4
 
-[node name="Minimap" parent="HUD" instance=ExtResource("3_b2n6x")]
+[node name="Minimap" parent="HUD" unique_id=1584417169 instance=ExtResource("3_b2n6x")]
+layout_mode = 3

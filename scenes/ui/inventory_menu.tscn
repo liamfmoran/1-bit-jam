@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://bs7usyfiife1r"]
 
-[ext_resource type="Script" path="res://scenes/ui/inventory_menu.gd" id="1_n5k8r"]
+[ext_resource type="Script" uid="uid://bie78fn3oxaxt" path="res://scenes/ui/inventory_menu.gd" id="1_n5k8r"]
 
-[node name="InventoryMenu" type="Control"]
+[node name="InventoryMenu" type="Control" unique_id=230427852]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,49 +11,110 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_n5k8r")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=553347918]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InventoryLabel" type="Label" parent="VBoxContainer" unique_id=2128504697]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Ship Parts"
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=1315930998]
+layout_mode = 2
+
+[node name="ShopLabel" type="Label" parent="VBoxContainer" unique_id=696541130]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Shop"
+
+[node name="ActionButton" type="Button" parent="VBoxContainer" unique_id=1386895505]
+layout_mode = 2
+text = "Buy Item"
+
+[node name="Home" type="HBoxContainer" parent="." unique_id=609656757]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-offset_left = 8.0
-offset_top = 8.0
-offset_right = -8.0
-offset_bottom = -8.0
+alignment = 1
 
-[node name="InventoryLabel" type="Label" parent="VBoxContainer"]
+[node name="BuyButton" type="Button" parent="Home" unique_id=630405374]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Ship Parts"
+size_flags_horizontal = 3
+text = "BUY"
 
-[node name="InventoryScroll" type="ScrollContainer" parent="VBoxContainer"]
+[node name="SellButton" type="Button" parent="Home" unique_id=897180183]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SELL"
+
+[node name="BuyMenu" type="VBoxContainer" parent="." unique_id=1225177883]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ShopScroll" type="ScrollContainer" parent="BuyMenu" unique_id=1571217849]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="InventoryList" type="VBoxContainer" parent="VBoxContainer/InventoryScroll"]
+[node name="ShopList" type="VBoxContainer" parent="BuyMenu/ShopScroll" unique_id=1768939811]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-layout_mode = 2
-
-[node name="ShopLabel" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Shop"
-
-[node name="ShopScroll" type="ScrollContainer" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="ShopList" type="VBoxContainer" parent="VBoxContainer/ShopScroll"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="ActionButton" type="Button" parent="VBoxContainer"]
+[node name="ActionButton" type="Button" parent="BuyMenu" unique_id=1540124028]
 layout_mode = 2
 text = "Buy Item"
+
+[node name="BackButton" type="Button" parent="BuyMenu" unique_id=2034685535]
+layout_mode = 2
+text = "Back"
+
+[node name="SellMenu" type="VBoxContainer" parent="." unique_id=1384454252]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InventoryScroll" type="ScrollContainer" parent="SellMenu" unique_id=1893138678]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="InventoryList" type="VBoxContainer" parent="SellMenu/InventoryScroll" unique_id=2041037934]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ActionButton" type="Button" parent="SellMenu" unique_id=1012685147]
+layout_mode = 2
+text = "Sell Item"
+
+[node name="BackButton" type="Button" parent="SellMenu" unique_id=50506293]
+layout_mode = 2
+text = "Back"
+
+[connection signal="button_down" from="Home/BuyButton" to="." method="_on_buy_button_button_down"]
+[connection signal="button_down" from="Home/SellButton" to="." method="_on_sell_button_button_down"]
+[connection signal="button_down" from="BuyMenu/BackButton" to="." method="_on_back_button_button_down"]
+[connection signal="button_down" from="SellMenu/BackButton" to="." method="_on_back_button_button_down"]

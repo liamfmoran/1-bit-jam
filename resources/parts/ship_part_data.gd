@@ -1,6 +1,8 @@
 class_name ShipPartData
 extends Resource
 
+#in the future we change this to extend item data
+
 @export var part_name: StringName
 @export var slot_type: StringName
 @export var stats: Dictionary = {}

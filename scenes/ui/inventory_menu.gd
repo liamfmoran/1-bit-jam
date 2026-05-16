@@ -1,16 +1,16 @@
 extends Control
 
-const PART_ITEM_SCENE = preload("res://scenes/ui/ship_part_item.tscn")
+const ITEM_SCENE = preload("res://scenes/ui/item.tscn")
 
-@onready var inventory_list: VBoxContainer = $VBoxContainer/InventoryScroll/InventoryList
-@onready var shop_list: VBoxContainer = $VBoxContainer/ShopScroll/ShopList
+@onready var inventory_list: VBoxContainer = %InventoryList
+@onready var shop_list: VBoxContainer = %ShopList
 @onready var action_button: Button = $VBoxContainer/ActionButton
 
 var _inventory_group: ButtonGroup
 var _shop_group: ButtonGroup
 var _selected_item: Button
 var _is_selling: bool = false
-var _shop_parts: Array[ShipPartData] = []
+var _shop_parts: Array[ItemData] = []
 
 
 func _ready() -> void:
@@ -20,9 +20,10 @@ func _ready() -> void:
 	action_button.disabled = true
 	GameState.inventory_changed.connect(_refresh)
 	_refresh()
+	show_home()
 
 
-func set_parts(parts: Array[ShipPartData]) -> void:
+func set_parts(parts: Array[ItemData]) -> void:
 	_shop_parts = parts
 	_populate_shop()
 
@@ -36,13 +37,12 @@ func _refresh() -> void:
 	if not _shop_parts.is_empty():
 		_populate_shop()
 
-
 func _populate_inventory() -> void:
 	for child in inventory_list.get_children():
 		child.queue_free()
 
 	for part in GameState.owned_parts:
-		var item := PART_ITEM_SCENE.instantiate()
+		var item := ITEM_SCENE.instantiate()
 		item.text = "%s ($%d)" % [part.part_name, part.cost]
 		item.part_data = part
 		item.button_group = _inventory_group
@@ -55,9 +55,8 @@ func _populate_shop() -> void:
 		child.queue_free()
 
 	for part in _shop_parts:
-		var item := PART_ITEM_SCENE.instantiate()
-		item.text = "%s - $%d" % [part.part_name, part.cost]
-		item.part_data = part
+		var item := ITEM_SCENE.instantiate()
+		item._render(part)
 		item.button_group = _shop_group
 		item.toggled.connect(_on_shop_toggled.bind(item))
 		shop_list.add_child(item)
@@ -101,3 +100,27 @@ func _on_action_pressed() -> void:
 		GameState.sell_part(_selected_item.part_data)
 	else:
 		GameState.buy_part(_selected_item.part_data)
+
+func show_buy():
+	$Home.visible=false
+	$BuyMenu.visible=true
+	$SellMenu.visible=false
+
+func show_home():
+	$Home.visible=true
+	$BuyMenu.visible=false
+	$SellMenu.visible=false
+
+func show_sell():
+	$Home.visible=false
+	$BuyMenu.visible=false
+	$SellMenu.visible=true
+
+func _on_buy_button_button_down():
+	show_buy()
+	
+func _on_back_button_button_down():
+	show_home()
+	
+func _on_sell_button_button_down():
+	show_sell()

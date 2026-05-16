@@ -2,7 +2,7 @@ extends Node2D
 
 @export var dock_name: WorldData.Stations
 @export var jobs: Array[JobData] = []
-@export var parts_for_sale: Array[ShipPartData] = []
+@export var parts_for_sale: Array[ItemData] = []
 
 @onready var left_panel: ColorRect = $Panels/LeftPanel
 @onready var right_panel: ColorRect = $Panels/RightPanel
