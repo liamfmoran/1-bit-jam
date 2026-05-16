@@ -17,6 +17,7 @@ var _current_rotation: float = 0.0
 var _dock_zoom_weight: float = 0.0
 var _position_offset_weight := 1.0
 
+
 const SHIP_OFFSET: Vector2 = Vector2(0, 200)
 
 

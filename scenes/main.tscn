@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://708ycscidli0" path="res://scenes/effects/starfield.gd" id="4_m6k3x"]
 [ext_resource type="Shader" uid="uid://cwiwph1j2y2r8" path="res://shaders/starfield.gdshader" id="5_v9n2p"]
 [ext_resource type="Shader" uid="uid://w1j61wlqsv1t" path="res://shaders/onebit_post.gdshader" id="6_n4k8r"]
+[ext_resource type="PackedScene" uid="uid://ykjdf2dig34" path="res://scenes/ui/hud.tscn" id="7_o6xl0"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_p9k2m"]
 shader = ExtResource("6_n4k8r")
@@ -24,7 +25,6 @@ position = Vector2(2, -1)
 
 [node name="PostProcessLayer" type="CanvasLayer" parent="." unique_id=1923292393]
 layer = 2
-visible = false
 
 [node name="OneBitPost" type="ColorRect" parent="PostProcessLayer" unique_id=102847593]
 material = SubResource("ShaderMaterial_p9k2m")
@@ -52,3 +52,5 @@ layer = 4
 
 [node name="Minimap" parent="HUD" unique_id=1584417169 instance=ExtResource("3_b2n6x")]
 layout_mode = 3
+
+[node name="HUD" parent="HUD" unique_id=1196411326 instance=ExtResource("7_o6xl0")]
