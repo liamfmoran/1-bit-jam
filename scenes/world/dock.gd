@@ -35,13 +35,13 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	_docked_ship = body
 
-	body.freeze = true
+	body.set_deferred("freeze", true)
 	var tween_pos : Tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_LINEAR)
 	tween_pos.tween_property(body, "global_position", detection_zone.global_position, 1.0)
 	var tween_rot : Tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_LINEAR)
 	tween_rot.tween_property(body, "global_rotation", detection_zone.global_rotation, 1.0)
 	tween_pos.finished.connect(func():
-		body.freeze = false
+		body.set_deferred("freeze", false)
 		if _station:
 			GameState.complete_delivery(_station.id)
 		GameState.dock()
