@@ -5,7 +5,6 @@ uniform vec2 ship_velocity = vec2(0.0);
 uniform float camera_rotation = 0.0;
 
 const float TRAIL_FACTOR = 0.08;
-const vec2 VIEWPORT_CENTER = vec2(640.0, 360.0);
 
 float hash21(vec2 p) {
 	p = fract(p * vec2(127.1, 311.7));
@@ -25,13 +24,13 @@ vec2 rotate_vec(vec2 v, float angle) {
 // density: fraction of cells that contain a star (0..1)
 // parallax: how much this layer shifts with ship position
 // seed: unique per-layer hash seed
-float star_layer(vec2 frag_pos, float cell_size, float star_radius, float density, float parallax, float seed) {
+float star_layer(vec2 frag_pos, vec2 viewport_center, float cell_size, float star_radius, float density, float parallax, float seed) {
 	// Rotate the screen offset so the star field turns with the camera,
 	// then translate by ship_position for parallax scrolling.
 	// Rotating frag_pos - center (bounded by ~640px) avoids the artifact where
 	// rotating ship_position (which grows with distance) made rotation more
 	// intense the further from the world origin.
-	vec2 screen_offset = rotate_vec(frag_pos - VIEWPORT_CENTER, camera_rotation);
+	vec2 screen_offset = rotate_vec(frag_pos - viewport_center, camera_rotation);
 	vec2 shifted = ship_position * parallax + screen_offset;
 
 	vec2 cell = floor(shifted / cell_size);
@@ -78,11 +77,12 @@ float star_layer(vec2 frag_pos, float cell_size, float star_radius, float densit
 }
 
 void fragment() {
+	vec2 viewport_center = vec2(0.5) / SCREEN_PIXEL_SIZE;
 	float brightness = 0.0;
-	brightness = max(brightness, star_layer(FRAGCOORD.xy, 80.0, 0.8, 0.25, 0.05, 1.7));
-	brightness = max(brightness, star_layer(FRAGCOORD.xy, 72.0, 0.9, 0.28, 0.10, 3.4));
-	brightness = max(brightness, star_layer(FRAGCOORD.xy, 65.0, 1.0, 0.30, 0.15, 5.1));
-	brightness = max(brightness, star_layer(FRAGCOORD.xy, 58.0, 1.1, 0.25, 0.20, 7.8));
-	brightness = max(brightness, star_layer(FRAGCOORD.xy, 50.0, 1.3, 0.20, 0.25, 9.3));
-	COLOR = vec4(vec3(brightness), 1.0);
+	brightness = max(brightness, star_layer(FRAGCOORD.xy, viewport_center, 80.0, 0.8, 0.12, 0.05, 1.7));
+	brightness = max(brightness, star_layer(FRAGCOORD.xy, viewport_center, 72.0, 0.9, 0.14, 0.10, 3.4));
+	brightness = max(brightness, star_layer(FRAGCOORD.xy, viewport_center, 65.0, 1.0, 0.15, 0.15, 5.1));
+	brightness = max(brightness, star_layer(FRAGCOORD.xy, viewport_center, 58.0, 1.1, 0.12, 0.20, 7.8));
+	brightness = max(brightness, star_layer(FRAGCOORD.xy, viewport_center, 50.0, 1.3, 0.10, 0.25, 9.3));
+	COLOR = vec4(1.0, 1.0, 1.0, brightness);
 }

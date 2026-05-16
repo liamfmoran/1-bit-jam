@@ -9,8 +9,8 @@ extends Node2D
 @onready var detection_zone: Area2D = $DetectionZone
 
 const ANIM_DURATION := 0.4
-const JOBS_MENU = preload("res://scenes/ui/jobs_menu.tscn")
-const INVENTORY_MENU = preload("res://scenes/ui/inventory_menu.tscn")
+const JOBS_MENU: PackedScene = preload("res://scenes/ui/jobs_menu.tscn")
+const INVENTORY_MENU: PackedScene = preload("res://scenes/ui/inventory_menu.tscn")
 
 var _panel_tween: Tween
 var _docked_ship: RigidBody2D
@@ -27,7 +27,7 @@ func _ready() -> void:
 
 
 func _on_body_entered(body: Node2D) -> void:
-	if _docked_ship or not body is RigidBody2D:
+	if _docked_ship or not body.is_in_group("player"):
 		return
 	_docked_ship = body
 	GameState.complete_delivery(dock_name)

@@ -7,23 +7,37 @@
 [ext_resource type="Resource" uid="uid://cm7djeqn1jj1f" path="res://resources/jobs/example_delivery_quest.tres" id="4_1yooq"]
 [ext_resource type="Script" uid="uid://coly87d6qr7at" path="res://resources/parts/ship_part_data.gd" id="4_j2gmx"]
 [ext_resource type="Resource" path="res://resources/parts/example_ship_part_b.tres" id="4_q5n3k"]
-[ext_resource type="Script" uid="uid://bkc422yookv1u" path="res://scenes/world/camera_manager.gd" id="7_c3p6r"]
-[ext_resource type="Resource" uid="uid://b1in8w8ppvnu6" path="res://resources/jobs/example_fetch_quest.tres" id="8_gb53w"]
+[ext_resource type="Resource" path="res://resources/jobs/example_job_a.tres" id="5_x2w7r"]
+[ext_resource type="Resource" path="res://resources/jobs/example_job_b.tres" id="6_t4m9n"]
+[ext_resource type="Script" path="res://scenes/world/camera_manager.gd" id="7_c3p6r"]
+[ext_resource type="Script" path="res://scenes/world/hazard_manager.gd" id="8_j4v6w"]
+[ext_resource type="Script" path="res://scenes/world/asteroid_spawner.gd" id="9_n2r8t"]
+[ext_resource type="Script" path="res://scenes/world/world.gd" id="10_w5d2k"]
 
-[node name="World" type="Node2D" unique_id=277140939]
+[node name="World" type="Node2D"]
+script = ExtResource("10_w5d2k")
 
-[node name="Ship" parent="." unique_id=1241394934 instance=ExtResource("1_k4m9p")]
+[node name="Ship" parent="." instance=ExtResource("1_k4m9p")]
+mass = 200.0
+rotation_thrust_force = 40000.0
 
 [node name="DockA" parent="." unique_id=118775999 instance=ExtResource("2_n7x3q")]
 position = Vector2(0, -400)
-jobs = Array[ExtResource("3_bq33v")]([ExtResource("4_1yooq")])
-parts_for_sale = Array[ExtResource("4_j2gmx")]([ExtResource("3_p8v2m"), ExtResource("4_q5n3k")])
+dock_name = &"Dock A"
+jobs = [ExtResource("5_x2w7r")]
+parts_for_sale = [ExtResource("3_p8v2m"), ExtResource("4_q5n3k")]
 
 [node name="DockB" parent="." unique_id=175561740 instance=ExtResource("2_n7x3q")]
 position = Vector2(1200, -400)
-dock_name = 1
-jobs = Array[ExtResource("3_bq33v")]([ExtResource("8_gb53w")])
-parts_for_sale = Array[ExtResource("4_j2gmx")]([ExtResource("3_p8v2m"), ExtResource("4_q5n3k")])
+dock_name = &"Dock B"
+jobs = [ExtResource("6_t4m9n")]
+parts_for_sale = [ExtResource("3_p8v2m"), ExtResource("4_q5n3k")]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1697368732]
 script = ExtResource("7_c3p6r")
+
+[node name="HazardManager" type="Node" parent="."]
+script = ExtResource("8_j4v6w")
+
+[node name="AsteroidSpawner" type="Node2D" parent="."]
+script = ExtResource("9_n2r8t")

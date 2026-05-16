@@ -13,10 +13,8 @@ var equipped_parts: Dictionary = {}
 var cab_grid_size: Vector2i = Vector2i(6, 10)
 var trailer_grid_sizes: Array[Vector2i] = []
 var total_cargo_mass: float = 0.0
-var active_jobs: Array = []
-var owned_parts: Array = []
-
-
+var active_jobs: Array[JobData] = []
+var owned_parts: Array[ShipPartData] = []
 
 func accept_job(job: JobData) -> void:
 	active_jobs.append(job)
@@ -54,4 +52,3 @@ func complete_delivery(dock_name: WorldData.Stations) -> void:
 			completed.append(job)
 	for job in completed:
 		complete_job(job)
-		print("delivery complete")
