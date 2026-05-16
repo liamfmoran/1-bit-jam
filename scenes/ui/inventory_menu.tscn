@@ -81,14 +81,13 @@ size_flags_vertical = 3
 
 [node name="ActionButton" type="Button" parent="BuyMenu" unique_id=1540124028]
 layout_mode = 2
-text = "Buy Item"
+text = " "
 
 [node name="BackButton" type="Button" parent="BuyMenu" unique_id=2034685535]
 layout_mode = 2
 text = "Back"
 
 [node name="SellMenu" type="VBoxContainer" parent="." unique_id=1384454252]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -108,7 +107,7 @@ size_flags_vertical = 3
 
 [node name="ActionButton" type="Button" parent="SellMenu" unique_id=1012685147]
 layout_mode = 2
-text = "Sell Item"
+text = " "
 
 [node name="BackButton" type="Button" parent="SellMenu" unique_id=50506293]
 layout_mode = 2

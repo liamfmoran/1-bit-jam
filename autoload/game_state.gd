@@ -14,7 +14,7 @@ var cab_grid_size: Vector2i = Vector2i(6, 10)
 var trailer_grid_sizes: Array[Vector2i] = []
 var total_cargo_mass: float = 0.0
 var active_jobs: Array[JobData] = []
-var owned_parts: Array[ShipPartData] = []
+var inventory: Array[ItemData] = []
 
 func accept_job(job: JobData) -> void:
 	active_jobs.append(job)
@@ -31,15 +31,15 @@ func complete_job(job: JobData) -> void:
 func buy_part(part: Resource) -> void:
 	if money >= part.cost:
 		money -= part.cost
-		owned_parts.append(part)
+		inventory.append(part)
 		money_changed.emit(money)
 		inventory_changed.emit()
 
 
 func sell_part(part: Resource) -> void:
-	if part not in owned_parts:
+	if part not in inventory:
 		return
-	owned_parts.erase(part)
+	inventory.erase(part)
 	money += part.cost
 	money_changed.emit(money)
 	inventory_changed.emit()
