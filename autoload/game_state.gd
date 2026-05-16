@@ -6,8 +6,10 @@ signal jobs_changed()
 signal inventory_changed()
 signal docked()
 signal undocked()
+signal hp_changed()
 
 var money: int = 10000
+var hp: int = 100
 var active_jobs: Array[JobData] = []
 var inventory: Array[ItemData] = []
 
@@ -30,6 +32,9 @@ func dock() -> void:
 func undock() -> void:
 	undocked.emit()
 
+func update_hp(val:int) -> void:
+	hp = clamp(hp + val,0,100)
+	hp_changed.emit()
 
 func buy_part(part: ItemData) -> void:
 	if money >= part.cost:

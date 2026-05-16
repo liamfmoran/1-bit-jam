@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cw8c6jlc63r1u"]
 
 [ext_resource type="Script" uid="uid://f4d3q37rtla0" path="res://scenes/ship/ship.gd" id="1_k8m3p"]
-[ext_resource type="Texture2D" path="res://icon.svg" id="2_g4x8m"]
+[ext_resource type="Texture2D" uid="uid://dbxud8km3iuy5" path="res://icon.svg" id="2_g4x8m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v4n7q"]
 size = Vector2(40, 80)
@@ -21,10 +21,10 @@ offset_right = 20.0
 offset_bottom = 40.0
 color = Color(0.5, 0.5, 0.5, 1)
 
-[node name="Logo" type="Sprite2D" parent="."]
-texture = ExtResource("2_g4x8m")
-scale = Vector2(0.3125, 0.3125)
+[node name="Logo" type="Sprite2D" parent="." unique_id=18224868]
 texture_filter = 1
+scale = Vector2(0.3125, 0.3125)
+texture = ExtResource("2_g4x8m")
 
 [node name="Flames" type="Node2D" parent="." unique_id=5025990]
 
@@ -47,3 +47,21 @@ texture_filter = 1
 [node name="FlameLAT_R" type="ColorRect" parent="Flames" unique_id=881506378]
 
 [node name="FlameLAT_L" type="ColorRect" parent="Flames" unique_id=1940546229]
+
+[node name="Label" type="Label" parent="." unique_id=149593546]
+offset_left = -24.0
+offset_top = 18.0
+offset_right = 26.0
+offset_bottom = 41.0
+text = "health"
+vertical_alignment = 1
+
+[node name="Health" type="ProgressBar" parent="." unique_id=1610620977]
+unique_name_in_owner = true
+offset_left = -20.0
+offset_top = 35.0
+offset_right = 20.0
+offset_bottom = 62.0
+step = 1.0
+value = 50.0
+fill_mode = 2

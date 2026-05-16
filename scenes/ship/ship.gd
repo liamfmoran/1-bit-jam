@@ -54,6 +54,7 @@ func _ready() -> void:
 	$Hull.material = mat
 	$Logo.material = mat
 	_hull_mat = mat
+	%Health.value = GameState.hp
 	_setup_thruster_visuals()
 
 
