@@ -83,6 +83,9 @@ static func _zone_from_dict(d: Dictionary) -> ZoneData:
 	zone.position = Vector2(float(pos[0]), float(pos[1]))
 	zone.radius = float(d.get("radius", 500.0))
 	zone.falloff = float(d.get("falloff", 300.0))
+	if d.has("line_direction"):
+		var raw_ld: Array = d.get("line_direction", [0, 0])
+		zone.line_direction = Vector2(float(raw_ld[0]), float(raw_ld[1])).normalized()
 	for sd: Variant in d.get("spawners", []):
 		var cfg := _spawner_config_from_dict(sd as Dictionary)
 		if cfg:
