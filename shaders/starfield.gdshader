@@ -80,10 +80,15 @@ float star_layer(vec2 frag_pos, vec2 viewport_center, float cell_size, float sta
 void fragment() {
 	vec2 player_screen_pos = player_screen_uv / SCREEN_PIXEL_SIZE;
 	float brightness = 0.0;
-	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 80.0, 0.8, 0.12, 0.05, 1.7));
-	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 72.0, 0.9, 0.14, 0.10, 3.4));
-	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 65.0, 1.0, 0.15, 0.15, 5.1));
-	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 58.0, 1.1, 0.12, 0.20, 7.8));
-	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 50.0, 1.3, 0.10, 0.25, 9.3));
+	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 80.0, 0.70, 0.06, 0.020,  1.7));
+	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 77.0, 0.82, 0.06, 0.027,  2.3));
+	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 73.0, 0.94, 0.06, 0.037,  4.1));
+	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 70.0, 1.07, 0.06, 0.050,  5.8));
+	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 67.0, 1.19, 0.06, 0.068,  6.5));
+	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 63.0, 1.32, 0.06, 0.092,  7.2));
+	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 60.0, 1.44, 0.06, 0.125,  8.6));
+	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 57.0, 1.56, 0.06, 0.170,  9.3));
+	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 53.0, 1.69, 0.06, 0.230, 11.1));
+	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 50.0, 1.80, 0.06, 0.300, 12.4));
 	COLOR = vec4(1.0, 1.0, 1.0, brightness);
 }
