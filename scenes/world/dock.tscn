@@ -52,7 +52,6 @@ offset_top = -206.0
 offset_right = 120.0
 offset_bottom = -160.0
 pivot_offset = Vector2(240, 0)
-color = Color(1, 1, 1, 0.4745098)
 
 [node name="StationLabel" type="Label" parent="Panels/TopPanel" unique_id=599261730]
 unique_name_in_owner = true

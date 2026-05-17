@@ -12,6 +12,7 @@ extends BaseShip
 @export var lateral_rcs_max: float = 100000.0
 @export var steering_ratio: float = 0.35
 
+
 const FLAME_MAIN_W := 8.0
 const FLAME_MAIN_L := 36.0
 const FLAME_AUX_W  := 5.0
@@ -45,6 +46,9 @@ var gimbal_angle: float = 0.0
 var _hull_mat: ShaderMaterial
 var _thrusters: ThrusterVisuals
 var _docked: bool
+var _docked_mode_cooldown = 0
+
+var upgrades: Array[ItemData]
 
 
 func _ready() -> void:
@@ -63,6 +67,9 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_hull_mat.set_shader_parameter("ship_rotation", rotation)
 	_thrusters.tick(delta)
+
+	if _docked == true:
+		_docked_mode_cooldown+=delta
 
 
 func _setup_thruster_visuals() -> void:
@@ -93,8 +100,13 @@ func _physics_process(delta: float) -> void:
 
 	if GameState._is_ship_docked and not braking and linear_velocity.length_squared()>0.1:
 		braking = true
+		for i in [thrusting_forward,thrusting_reverse,turn_input]:
+			i = false
 	elif GameState._is_ship_docked and Input.is_action_pressed('thrust_forward'):
 		GameState.undock()
+		
+
+	print(_docked_mode_cooldown)
 
 
 	if braking:

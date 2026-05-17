@@ -16,6 +16,7 @@ shader = ExtResource("5_v9n2p")
 shader_parameter/ship_position = Vector2(0, 0)
 shader_parameter/ship_velocity = Vector2(0, 0)
 shader_parameter/camera_rotation = 0.0
+shader_parameter/player_screen_uv = Vector2(0.5, 0.5)
 
 [node name="Main" type="Node2D" unique_id=1111864905]
 script = ExtResource("1_a3k7m")

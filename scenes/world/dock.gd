@@ -40,19 +40,22 @@ func _on_body_entered(body: Node2D) -> void:
 		_camera = get_viewport().get_camera_2d() as CameraManager
 	_camera.start_docking(APPROACH_DURATION, detection_zone)
 
-	body.set_deferred("freeze", true)
+	body.freeze = true
 	var tween_pos : Tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_LINEAR)
 	tween_pos.tween_property(body, "global_position", detection_zone.global_position, APPROACH_DURATION)
 	var tween_rot : Tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_LINEAR)
-	tween_rot.tween_property(body, "global_rotation", detection_zone.global_rotation, APPROACH_DURATION)
+	tween_rot.tween_property(body, "global_rotation", detection_zone.global_rotation,APPROACH_DURATION)
 	tween_pos.finished.connect(func():
-		body.set_deferred("freeze", false)
-		if _station:
-			GameState.complete_delivery(_station.id)
+		body.freeze=false
 		GameState.dock()
-		_show_menus()
-		_animate_panels(true)
+		body.linear_velocity = Vector2.ZERO
+		body.angular_velocity = 0
 	)
+	if _station:
+		GameState.complete_delivery(_station.id)
+	_show_menus()
+	_animate_panels(true)
+
 
 	
 

@@ -13,7 +13,7 @@
 		{
 			"id": "dock_beta",
 			"display_name": "Beta Station",
-			"position": [0, -5000],
+			"position": [0, -10000],
 			"radius": 350,
 			"falloff": 250,
 			"spawners": [
