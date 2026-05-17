@@ -49,7 +49,7 @@ grow_vertical = 2
 [node name="ShopLabel" type="Label" parent="VBoxContainer" unique_id=2128504697]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "SHOP"
+text = "UPGRADES"
 horizontal_alignment = 1
 
 [node name="ShopScroll" type="ScrollContainer" parent="VBoxContainer" unique_id=1571217849]

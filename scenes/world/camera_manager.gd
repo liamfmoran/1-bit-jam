@@ -3,11 +3,10 @@ extends Camera2D
 
 enum State { FLIGHT, DOCKING, UNDOCKING }
 
-@export var zoom_min: float = 0.6
+@export var zoom_min: float = 0.4
 @export var zoom_max: float = 1.125
-@export var zoom_speed_factor: float = 0.0015
+@export var zoom_speed_factor: float = 0.0004
 @export var zoom_smoothing: float = 3.0
-@export var zoom_out_smoothing: float = 5.5
 @export var dock_zoom: float = 1.125
 @export var dock_zoom_duration: float = 0.0
 @export var undock_zoom_duration: float = 1.0
@@ -38,7 +37,9 @@ func _physics_process(delta: float) -> void:
 	if not is_instance_valid(_player):
 		return
 
-	var ship_cam := _player.global_position - (flight_screen_offset / zoom.x).rotated(_current_rotation)
+	var zoom_t := clampf((zoom_max - zoom.x) / (zoom_max - zoom_min), 0.0, 1.0)
+	var scaled_offset := flight_screen_offset * lerpf(1.0, 1.5, zoom_t)
+	var ship_cam := _player.global_position - (scaled_offset / zoom.x).rotated(_current_rotation)
 	var new_cam_pos: Vector2
 	if _state != State.FLIGHT and _dock_target and is_instance_valid(_dock_target):
 		new_cam_pos = ship_cam.lerp(_dock_target.global_position, _dock_weight)
@@ -56,9 +57,8 @@ func _physics_process(delta: float) -> void:
 			zoom = Vector2(z, z)
 		State.FLIGHT, State.UNDOCKING:
 			var speed := (_player as RigidBody2D).linear_velocity.length() if _player is RigidBody2D else 0.0
-			var flight_zoom := clampf(zoom_max - speed * zoom_speed_factor, zoom_min, zoom_max)
-			var smoothing := zoom_out_smoothing if flight_zoom < zoom.x else zoom_smoothing
-			zoom = zoom.lerp(Vector2(flight_zoom, flight_zoom), smoothing * delta)
+			var target_zoom := clampf(zoom_max - speed * zoom_speed_factor, zoom_min, zoom_max)
+			zoom = zoom.lerp(Vector2(target_zoom, target_zoom), zoom_smoothing * delta)
 
 
 func start_docking(approach_duration: float, dock_target: Node2D) -> void:

@@ -31,6 +31,30 @@ func _ready() -> void:
 	left_panel.scale.x = 0.0
 	right_panel.scale.x = 0.0
 	top_panel.scale.x = 0.0
+	_check_initial_dock.call_deferred()
+
+
+func _check_initial_dock() -> void:
+	await get_tree().physics_frame
+	if _docked_ship:
+		return
+	for body: Node2D in detection_zone.get_overlapping_bodies():
+		if body.is_in_group("player"):
+			_dock_immediate(body)
+			return
+
+
+func _dock_immediate(body: Node2D) -> void:
+	_docked_ship = body
+	body.global_position = detection_zone.global_position
+	body.linear_velocity = Vector2.ZERO
+	body.angular_velocity = 0
+	GameState.dock()
+	if _station:
+		GameState.complete_delivery(_station.id)
+		GameState.complete_fetch(_station.id)
+	_show_menus()
+	_animate_panels(true)
 
 
 func _process(delta: float) -> void:
@@ -45,7 +69,7 @@ func _on_body_entered(body: Node2D) -> void:
 		_camera = get_viewport().get_camera_2d() as CameraManager
 	_camera.start_docking(APPROACH_DURATION, detection_zone)
 
-	body.freeze = true
+	body.set_deferred("freeze", true)
 	var tween_pos : Tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUINT)
 	tween_pos.tween_property(body, "global_position", detection_zone.global_position, APPROACH_DURATION)
 	# var tween_rot : Tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_LINEAR)
@@ -58,11 +82,9 @@ func _on_body_entered(body: Node2D) -> void:
 	)
 	if _station:
 		GameState.complete_delivery(_station.id)
+		GameState.complete_fetch(_station.id)
 	_show_menus()
 	_animate_panels(true)
-
-
-	
 
 
 func _on_body_exited(body: Node2D) -> void:

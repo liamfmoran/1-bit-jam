@@ -3,7 +3,9 @@
 		{
 			"id": "ALPHA",
 			"display_name": "Alpha Station",
+			"label": "α",
 			"jobs": [
+				"lost_cargo",
 				"first_day"
 			],
 			"items_for_sale": [
@@ -19,12 +21,27 @@
 		{
 			"id": "BETA",
 			"display_name": "Beta Station",
+			"label": "β",
 			"jobs": [
 				"forgot_wallet"
 			],
 			"items_for_sale": [
 				"test_item_2"
 			]
+		},
+		{
+			"id": "GAMMA",
+			"display_name": "Gamma Station",
+			"label": "γ",
+			"jobs": [],
+			"items_for_sale": []
+		},
+		{
+			"id": "DELTA",
+			"display_name": "Delta Station",
+			"label": "δ",
+			"jobs": [],
+			"items_for_sale": []
 		}
 	]
 }

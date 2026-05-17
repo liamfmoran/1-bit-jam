@@ -3,7 +3,7 @@
 		{
 			"id": "dock_alpha",
 			"display_name": "Alpha Station",
-			"position": [0, -600],
+			"position": [0, 12000],
 			"radius": 350,
 			"falloff": 250,
 			"spawners": [
@@ -13,7 +13,7 @@
 		{
 			"id": "dock_beta",
 			"display_name": "Beta Station",
-			"position": [0, -10000],
+			"position": [12000, 0],
 			"radius": 350,
 			"falloff": 250,
 			"spawners": [
@@ -21,61 +21,32 @@
 			]
 		},
 		{
-			"id": "beta_guards",
-			"position": [0, -5900],
-			"radius": 700,
-			"falloff": 400,
+			"id": "dock_gamma",
+			"display_name": "Gamma Station",
+			"position": [0, -12000],
+			"radius": 350,
+			"falloff": 250,
 			"spawners": [
-				{ "type": "enemies", "count": 3, "patrol_radius": 500 }
+				{ "type": "dock", "dock_id": "GAMMA" }
 			]
 		},
 		{
-			"id": "crossing_belt",
-			"position": [0, -2800],
-			"radius": 1500,
-			"falloff": 500,
-			"line_direction": [1, 0],
+			"id": "dock_delta",
+			"display_name": "Delta Station",
+			"position": [-12000, 0],
+			"radius": 350,
+			"falloff": 250,
 			"spawners": [
-				{ "type": "asteroid_belt", "speed": 420, "max_count": 140, "width": 900, "direction": [1, 0] }
+				{ "type": "dock", "dock_id": "DELTA" }
 			]
 		},
 		{
-			"id": "outer_belt",
-			"position": [6000, 0],
-			"radius": 1800,
-			"falloff": 900,
+			"id": "left_field_belt",
+			"position": [-7000, -4000],
+			"radius": 2500,
+			"falloff": 1000,
 			"spawners": [
-				{ "type": "asteroids", "max_count": 28, "density": 0.9 },
-				{ "type": "enemies", "count": 3, "patrol_radius": 1000 }
-			]
-		},
-		{
-			"id": "debris_run",
-			"position": [2500, -3000],
-			"radius": 900,
-			"falloff": 500,
-			"spawners": [
-				{ "type": "asteroids", "max_count": 12, "density": 0.5 },
-				{ "type": "salvage", "count": 6 }
-			]
-		},
-		{
-			"id": "black_hole",
-			"display_name": "The Maw",
-			"position": [9500, -2500],
-			"radius": 600,
-			"falloff": 800,
-			"spawners": [
-				{ "type": "black_hole", "pull_strength": 800.0 }
-			]
-		},
-		{
-			"id": "patrol_lane",
-			"position": [3800, 2200],
-			"radius": 1000,
-			"falloff": 600,
-			"spawners": [
-				{ "type": "enemies", "count": 4, "patrol_radius": 700 }
+				{ "type": "asteroid_belt", "speed": 300, "max_count": 120, "width": 1400, "direction": [0.966, 0.259] }
 			]
 		}
 	]

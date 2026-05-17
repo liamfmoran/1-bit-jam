@@ -1,6 +1,18 @@
 {
 	"jobs": [
 		{
+			"id": "lost_cargo",
+			"display_name": "Lost Cargo",
+			"description": "Some crates drifted off the dock. Can you go grab them?",
+			"type": "FETCH",
+			"money_reward": 150,
+			"origin": "ALPHA",
+			"destination": "",
+			"fetch_coordinate": [0, -1100],
+			"fetch_item": "test_item_3",
+			"cargo": []
+		},
+		{
 			"id": "first_day",
 			"display_name": "First Day",
 			"description": "Need someone to deliver thrusters, you up for the challenge?",

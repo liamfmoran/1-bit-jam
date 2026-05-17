@@ -1,7 +1,6 @@
 extends Node
 
 signal money_changed(new_amount: int)
-signal cargo_changed()
 signal jobs_changed()
 signal inventory_changed()
 signal equipped_parts_changed()
@@ -98,6 +97,21 @@ func complete_delivery(dock_name: String) -> void:
 	for job in active_jobs:
 		var delivery := job as DeliveryJobData
 		if delivery and delivery.destination != null and delivery.destination.id == dock_name:
+			completed.append(job)
+	for job in completed:
+		complete_job(job)
+
+
+func pickup_item(item: ItemData) -> void:
+	inventory.append(item)
+	inventory_changed.emit()
+
+
+func complete_fetch(station_id: String) -> void:
+	var completed := []
+	for job in active_jobs:
+		var fetch := job as FetchJobData
+		if fetch and fetch.is_fetched and fetch.origin != null and fetch.origin.id == station_id:
 			completed.append(job)
 	for job in completed:
 		complete_job(job)

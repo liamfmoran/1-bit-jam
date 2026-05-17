@@ -35,8 +35,6 @@ func _physics_process(_delta: float) -> void:
 		if not is_instance_valid(ast):
 			_asteroids.remove_at(i)
 			continue
-		var rb := ast as RigidBody2D
-		rb.linear_velocity = _dir * _speed
 		var ast_along: float = (ast.global_position - zone_center).dot(_dir)
 		if ast_along > player_along + OFFSCREEN_BUFFER:
 			_recycle(ast, zone_center, player_along, true)

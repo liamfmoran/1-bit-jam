@@ -162,6 +162,9 @@ static func _job_from_dict(d: Dictionary, item_registry: Dictionary[String, Item
 			var fetch := FetchJobData.new()
 			var fc: Array = d.get("fetch_coordinate", [0, 0])
 			fetch.fetch_coordinate = Vector2(float(fc[0]), float(fc[1]))
+			var fetch_item_id: String = d.get("fetch_item", "")
+			if not fetch_item_id.is_empty():
+				fetch.fetch_item = item_registry.get(fetch_item_id)
 			job = fetch
 		_:
 			push_error("DataLoader: unknown job type '%s'" % type_str)
@@ -179,6 +182,7 @@ static func _station_from_dict(d: Dictionary, job_registry: Dictionary[String, J
 	var station := StationData.new()
 	station.id = d.get("id", "")
 	station.display_name = d.get("display_name", "")
+	station.label = d.get("label", station.display_name)
 	for job_id: Variant in d.get("jobs", []):
 		var job: JobData = job_registry.get(job_id as String)
 		if job:

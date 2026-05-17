@@ -6,8 +6,9 @@ var radius: float = 16.0
 var _ship: Node2D
 var _mat: ShaderMaterial
 
-const DENSITY: float = 0.0125
+const DENSITY: float = 0.5
 const SPIN_RESPONSE: float = 0.3
+const LINEAR_RESPONSE: float = 0.4
 const ASTEROID_SHADER := preload("res://shaders/asteroid.gdshader")
 
 static var _shared_tex: ImageTexture
@@ -20,6 +21,10 @@ func setup(r: float, ship: Node2D) -> void:
 	shape.radius = radius
 	$CollisionShape2D.shape = shape
 	mass = PI * radius * radius * DENSITY
+
+	var phys_mat := PhysicsMaterial.new()
+	phys_mat.bounce = 0.05
+	physics_material_override = phys_mat
 
 	if not _shared_tex:
 		var img := Image.create(1, 1, false, Image.FORMAT_RGBA8)
@@ -51,6 +56,9 @@ func _on_body_entered(body: Node) -> void:
 	var to_body := (body2d.global_position - global_position).normalized()
 	var rel_vel: Vector2 = other_vel - linear_velocity
 	apply_torque_impulse(to_body.cross(rel_vel) * SPIN_RESPONSE)
+	var approach := rel_vel.dot(-to_body)
+	if approach > 0.0:
+		apply_central_impulse(-to_body * approach * mass * LINEAR_RESPONSE)
 
 func _physics_process(_delta: float) -> void:
 	if not is_instance_valid(_ship):

@@ -42,9 +42,6 @@ func _populate_inventory() -> void:
 	for data in GameState.inventory:
 		_add_inventory_row(data)
 
-	for data in GameState.part_inventory:
-		_add_inventory_row(data)
-
 
 func _add_inventory_row(data: Resource) -> void:
 	var item := ITEM_SCENE.instantiate()
@@ -59,7 +56,8 @@ func _populate_shop() -> void:
 		child.queue_free()
 
 	for data in _shop_items:
-		_add_shop_row(data)
+		if data is ShipPartData and data not in GameState.part_inventory:
+			_add_shop_row(data)
 
 
 func _add_shop_row(data: Resource) -> void:
@@ -78,18 +76,8 @@ func _on_inventory_toggled(toggled_on: bool, item: Button) -> void:
 		return
 	_deselect_group(_shop_group)
 	_selected_item = item
-	if item.item_data is ShipPartData:
-		if GameState.is_part_equipped(item.item_data):
-			action_button.text = "UNEQUIP"
-			_action_callback = func():
-				GameState.unequip_part(GameState.slot_id_for(item.item_data))
-		else:
-			action_button.text = "EQUIP"
-			_action_callback = func():
-				GameState.equip_part(GameState.slot_id_for(item.item_data), item.item_data)
-	else:
-		action_button.text = "SELL"
-		_action_callback = func(): GameState.sell_part(item.item_data)
+	action_button.text = "SELL"
+	_action_callback = func(): GameState.sell_part(item.item_data)
 
 
 func _on_shop_toggled(toggled_on: bool, item: Button) -> void:
@@ -101,10 +89,7 @@ func _on_shop_toggled(toggled_on: bool, item: Button) -> void:
 	_deselect_group(_inventory_group)
 	_selected_item = item
 	action_button.text = "BUY"
-	if item.item_data is ShipPartData:
-		_action_callback = func(): GameState.buy_ship_part(item.item_data)
-	else:
-		_action_callback = func(): GameState.buy_part(item.item_data)
+	_action_callback = func(): GameState.buy_ship_part(item.item_data as ShipPartData)
 
 
 func _deselect_group(group: ButtonGroup) -> void:

@@ -65,7 +65,8 @@ func _ready() -> void:
 	$Hull.material = mat
 	$Logo.material = mat
 	_hull_mat = mat
-	%Health.value = GameState.hp
+	%Health.max_value = max_health
+	%Health.value = health
 	_setup_thruster_visuals()
 	_equip_default_parts()
 	GameState.equipped_parts_changed.connect(_on_equipped_parts_changed)
@@ -93,6 +94,11 @@ func _input(event: InputEvent) -> void:
 			_fire_held = not (hovered is BaseButton)
 		else:
 			_fire_held = false
+
+
+func take_damage(amount: float) -> void:
+	super.take_damage(amount)
+	%Health.value = health
 
 
 func _equip_default_parts() -> void:
