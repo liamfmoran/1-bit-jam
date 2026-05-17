@@ -9,7 +9,7 @@ enum State { FLIGHT, DOCKING, UNDOCKING }
 @export var zoom_smoothing: float = 3.0
 @export var zoom_out_smoothing: float = 5.5
 @export var dock_zoom: float = 1.125
-@export var dock_zoom_duration: float = 1.4
+@export var dock_zoom_duration: float = 0.0
 @export var undock_zoom_duration: float = 1.0
 @export var rotation_smoothing: float = 6.0
 @export var flight_screen_offset: Vector2 = Vector2(0, 150)

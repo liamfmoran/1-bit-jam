@@ -1,5 +1,6 @@
 extends Node2D
 
+@onready var panels: Node2D = $Panels
 @onready var left_panel: ColorRect = $Panels/LeftPanel
 @onready var right_panel: ColorRect = $Panels/RightPanel
 @onready var top_panel: ColorRect = $Panels/TopPanel
@@ -32,6 +33,10 @@ func _ready() -> void:
 	top_panel.scale.x = 0.0
 
 
+func _process(delta: float) -> void:
+	if _docked_ship:
+		panels.global_rotation = _docked_ship.global_rotation
+
 func _on_body_entered(body: Node2D) -> void:
 	if _docked_ship or not body.is_in_group("player"):
 		return
@@ -41,10 +46,10 @@ func _on_body_entered(body: Node2D) -> void:
 	_camera.start_docking(APPROACH_DURATION, detection_zone)
 
 	body.freeze = true
-	var tween_pos : Tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_LINEAR)
+	var tween_pos : Tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUINT)
 	tween_pos.tween_property(body, "global_position", detection_zone.global_position, APPROACH_DURATION)
-	var tween_rot : Tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_LINEAR)
-	tween_rot.tween_property(body, "global_rotation", detection_zone.global_rotation,APPROACH_DURATION)
+	# var tween_rot : Tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_LINEAR)
+	# tween_rot.tween_property(body, "global_rotation", detection_zone.global_rotation,APPROACH_DURATION)
 	tween_pos.finished.connect(func():
 		body.freeze=false
 		GameState.dock()
