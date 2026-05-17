@@ -1,0 +1,285 @@
+[gd_scene format=3 uid="uid://xlgy22oqth27"]
+
+[ext_resource type="Shader" uid="uid://w1j61wlqsv1t" path="res://shaders/onebit_post.gdshader" id="1_tasn5"]
+[ext_resource type="Script" uid="uid://bwa1daftrih75" path="res://shaders/shader_debug.gd" id="2_3x7d2"]
+[ext_resource type="Texture2D" uid="uid://ci0kohc0nu0xm" path="res://assets/items/icons/rock.png" id="3_r57uu"]
+
+[sub_resource type="Gradient" id="Gradient_bw"]
+
+[sub_resource type="GradientTexture2D" id="GradientTex"]
+gradient = SubResource("Gradient_bw")
+width = 650
+height = 720
+fill_from = Vector2(0.52884614, 0)
+fill_to = Vector2(0.5408654, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4byng"]
+shader = ExtResource("1_tasn5")
+
+[node name="ShaderDebug" type="Control" unique_id=1172699691]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_3x7d2")
+
+[node name="Bg" type="ColorRect" parent="." unique_id=100000001]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="HBox" type="HBoxContainer" parent="." unique_id=146221937]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Gradient" type="TextureRect" parent="HBox" unique_id=1308415623]
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = SubResource("GradientTex")
+stretch_mode = 5
+
+[node name="Scroll" type="ScrollContainer" parent="HBox" unique_id=121439857]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Labels" type="VBoxContainer" parent="HBox/Scroll" unique_id=1883787913]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="S8" type="Label" parent="HBox/Scroll/Labels" unique_id=370005856]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "The quick brown fox jumps over the lazy dog — 8"
+
+[node name="S9" type="Label" parent="HBox/Scroll/Labels" unique_id=1396460599]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "The quick brown fox jumps over the lazy dog — 9"
+
+[node name="S10" type="Label" parent="HBox/Scroll/Labels" unique_id=213125213]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "The quick brown fox jumps over the lazy dog — 10"
+
+[node name="S11" type="Label" parent="HBox/Scroll/Labels" unique_id=779053390]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "The quick brown fox jumps over the lazy dog — 11"
+
+[node name="S12" type="Label" parent="HBox/Scroll/Labels" unique_id=1871073701]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "The quick brown fox jumps over the lazy dog — 12"
+
+[node name="S14" type="Label" parent="HBox/Scroll/Labels" unique_id=1317427780]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "The quick brown fox jumps over the lazy dog — 14"
+
+[node name="S16" type="Label" parent="HBox/Scroll/Labels" unique_id=272378950]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "The quick brown fox jumps over the lazy dog — 16"
+
+[node name="S18" type="Label" parent="HBox/Scroll/Labels" unique_id=1713151304]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S20" type="Label" parent="HBox/Scroll/Labels" unique_id=472376440]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "The quick brown fox jumps over the lazy dog — 20"
+
+[node name="S22" type="Label" parent="HBox/Scroll/Labels" unique_id=703297870]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "The quick brown fox jumps over the lazy dog — 22"
+
+[node name="S24" type="Label" parent="HBox/Scroll/Labels" unique_id=308375831]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "The quick brown fox jumps over the lazy dog — 24"
+
+[node name="S26" type="Label" parent="HBox/Scroll/Labels" unique_id=35313217]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "The quick brown fox jumps over the lazy dog — 26"
+
+[node name="S28" type="Label" parent="HBox/Scroll/Labels" unique_id=2119118822]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "The quick brown fox jumps over the lazy dog — 28"
+
+[node name="S36" type="Label" parent="HBox/Scroll/Labels" unique_id=564392989]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "The quick brown fox jumps over the lazy dog — 36"
+
+[node name="S48" type="Label" parent="HBox/Scroll/Labels" unique_id=703217971]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "The quick brown fox jumps over the lazy dog — 48"
+
+[node name="S72" type="Label" parent="HBox/Scroll/Labels" unique_id=2119384100]
+layout_mode = 2
+theme_override_font_sizes/font_size = 72
+text = "The quick brown fox jumps over the lazy dog — 72"
+
+[node name="Control" type="VBoxContainer" parent="." unique_id=1422831622]
+layout_mode = 0
+offset_right = 435.0
+offset_bottom = 720.0
+
+[node name="S18a" type="Label" parent="Control" unique_id=1921657426]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a2" type="Label" parent="Control" unique_id=1039091056]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a3" type="Label" parent="Control" unique_id=522683254]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a4" type="Label" parent="Control" unique_id=875707461]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a5" type="Label" parent="Control" unique_id=1385808682]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a6" type="Label" parent="Control" unique_id=1980631272]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a7" type="Label" parent="Control" unique_id=550023783]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a8" type="Label" parent="Control" unique_id=370309112]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a9" type="Label" parent="Control" unique_id=223839201]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a10" type="Label" parent="Control" unique_id=1113232302]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a11" type="Label" parent="Control" unique_id=1854784354]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a12" type="Label" parent="Control" unique_id=905119068]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a13" type="Label" parent="Control" unique_id=1696966677]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a14" type="Label" parent="Control" unique_id=1462947887]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a15" type="Label" parent="Control" unique_id=811128059]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a16" type="Label" parent="Control" unique_id=492781531]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a17" type="Label" parent="Control" unique_id=837519674]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a18" type="Label" parent="Control" unique_id=1901248392]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a19" type="Label" parent="Control" unique_id=108765970]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a20" type="Label" parent="Control" unique_id=1971679541]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a21" type="Label" parent="Control" unique_id=1400016666]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a22" type="Label" parent="Control" unique_id=1373538289]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a23" type="Label" parent="Control" unique_id=645123985]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="S18a24" type="Label" parent="Control" unique_id=768136655]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "The quick brown fox jumps over the lazy dog — 18"
+
+[node name="PostProcessLayer" type="CanvasLayer" parent="." unique_id=124651477]
+layer = 2
+
+[node name="OneBitPost" type="ColorRect" parent="PostProcessLayer" unique_id=261479190]
+material = SubResource("ShaderMaterial_4byng")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=2009097843]
+layout_mode = 0
+offset_left = 578.0
+offset_top = 246.0
+offset_right = 628.0
+offset_bottom = 286.0
+texture = ExtResource("3_r57uu")
