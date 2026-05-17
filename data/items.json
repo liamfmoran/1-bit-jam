@@ -5,21 +5,24 @@
 			"display_name": "BIG GUN",
 			"description": "THIS IS A TEST DESCRIPTION",
 			"mass": 1.0,
-			"cost": 420
+			"cost": 420,
+			"icon": "res://assets/items/icons/gun.png"
 		},
 		{
 			"id": "test_item_2",
 			"display_name": "SPACE ROCK",
 			"description": "idk",
 			"mass": 1.0,
-			"cost": 30
+			"cost": 30,
+			"icon": "res://assets/items/icons/rock.png"
 		},
 		{
 			"id": "test_item_3",
 			"display_name": "GEM",
 			"description": "idk",
 			"mass": 1.0,
-			"cost": 69
+			"cost": 69,
+			"icon": "res://assets/items/icons/crystal.png"
 		}
 	]
 }

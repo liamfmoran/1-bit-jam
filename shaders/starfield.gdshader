@@ -52,10 +52,11 @@ float star_layer(vec2 frag_pos, vec2 viewport_center, float cell_size, float sta
 	float twinkle_phase = hash21(cell + vec2(seed * 3.7, seed * 5.1)) * 6.28318;
 	float twinkle_speed = 0.4 + hash21(cell + vec2(seed * 1.3, seed * 2.9)) * 1.2;
 	float twinkle = sin(TIME * twinkle_speed + twinkle_phase) * 0.25 + 0.75;
+	float star_brightness = 0.25 + hash21(cell + vec2(seed * 5.3, seed * 9.7)) * 0.75;
 
 	// Star head
 	if (length(to_frag) < radius) {
-		return twinkle;
+		return twinkle * star_brightness;
 	}
 
 	// Comet tail: world-space velocity, no extra rotation needed since
@@ -69,7 +70,7 @@ float star_layer(vec2 frag_pos, vec2 viewport_center, float cell_size, float sta
 			float taper = (1.0 - along / trail_len) * 0.4;
 			float perp = length(to_frag - along * trail_dir);
 			if (perp < radius * taper) {
-				return twinkle * (1.0 - along / trail_len);
+				return twinkle * star_brightness * (1.0 - along / trail_len);
 			}
 		}
 	}

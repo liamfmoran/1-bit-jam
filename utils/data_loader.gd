@@ -49,6 +49,9 @@ static func _item_from_dict(d: Dictionary) -> ItemData:
 	item.description = d.get("description", "")
 	item.mass = float(d.get("mass", 0.0))
 	item.cost = int(d.get("cost", 0))
+	var icon_path: String = d.get("icon", "")
+	if not icon_path.is_empty():
+		item.icon = load(icon_path)
 	return item
 
 static func _ship_part_from_dict(d: Dictionary) -> ShipPartData:

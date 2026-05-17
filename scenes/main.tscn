@@ -24,7 +24,7 @@ script = ExtResource("1_a3k7m")
 position = Vector2(2, -1)
 
 [node name="PostProcessLayer" type="CanvasLayer" parent="." unique_id=1923292393]
-layer = 2
+layer = 10
 
 [node name="OneBitPost" type="ColorRect" parent="PostProcessLayer" unique_id=102847593]
 material = SubResource("ShaderMaterial_p9k2m")
