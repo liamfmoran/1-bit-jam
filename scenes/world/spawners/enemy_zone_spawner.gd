@@ -28,6 +28,8 @@ func _spawn_enemies() -> void:
 			(enemy as RigidBody2D).linear_velocity = Vector2.ZERO
 			(enemy as RigidBody2D).angular_velocity = 0.0
 		enemy.call(&"setup", zone_center, _config.patrol_radius, _ship, _streamer)
+		if i == 0:
+			enemy.set(&"debug_log", true)
 		if enemy.has_signal("died"):
 			enemy.died.connect(_on_enemy_died.bind(enemy), CONNECT_ONE_SHOT)
 		_enemies.append(enemy)

@@ -26,10 +26,10 @@ static func load_zones() -> Array[ZoneData]:
 		result.append(_zone_from_dict(d))
 	return result
 
-static func load_stations(job_registry: Dictionary[String, JobData], item_registry: Dictionary[String, ItemData]) -> Dictionary[String, StationData]:
+static func load_stations(job_registry: Dictionary[String, JobData], item_registry: Dictionary[String, ItemData], part_registry: Dictionary[String, ShipPartData] = {}) -> Dictionary[String, StationData]:
 	var result: Dictionary[String, StationData] = {}
 	for d: Variant in _load_array("res://data/stations.json", "stations"):
-		var station := _station_from_dict(d, job_registry, item_registry)
+		var station := _station_from_dict(d, job_registry, item_registry, part_registry)
 		result[station.id] = station
 	return result
 
@@ -66,10 +66,24 @@ static func _ship_part_from_dict(d: Dictionary) -> ShipPartData:
 			wp.bullet_speed = float(stats.get("bullet_speed", wp.bullet_speed))
 			wp.weapon_range = float(stats.get("range",        wp.weapon_range))
 			part = wp
-		"thruster":
-			part = ThrusterPartData.new()
+		"engine", "thruster":
+			var ep := EnginePartData.new()
+			var stats: Dictionary = d.get("stats", {})
+			ep.power_multiplier = float(stats.get("power_multiplier", ep.power_multiplier))
+			ep.boost_capacity   = float(stats.get("boost_capacity",   ep.boost_capacity))
+			part = ep
 		"shield":
-			part = ShieldPartData.new()
+			var sp := ShieldPartData.new()
+			var stats: Dictionary = d.get("stats", {})
+			sp.max_shield     = float(stats.get("max_shield",     sp.max_shield))
+			sp.recharge_delay = float(stats.get("recharge_delay", sp.recharge_delay))
+			sp.recharge_time  = float(stats.get("recharge_time",  sp.recharge_time))
+			part = sp
+		"hull":
+			var hp := HullPartData.new()
+			var stats: Dictionary = d.get("stats", {})
+			hp.damage_negation = float(stats.get("damage_negation", hp.damage_negation))
+			part = hp
 		_:
 			push_error("DataLoader: unknown slot type '%s'" % slot_str)
 			part = ShipPartData.new()
@@ -161,7 +175,7 @@ static func _job_from_dict(d: Dictionary, item_registry: Dictionary[String, Item
 			job.cargo.append(item)
 	return job
 
-static func _station_from_dict(d: Dictionary, job_registry: Dictionary[String, JobData], item_registry: Dictionary[String, ItemData]) -> StationData:
+static func _station_from_dict(d: Dictionary, job_registry: Dictionary[String, JobData], item_registry: Dictionary[String, ItemData], part_registry: Dictionary[String, ShipPartData] = {}) -> StationData:
 	var station := StationData.new()
 	station.id = d.get("id", "")
 	station.display_name = d.get("display_name", "")
@@ -173,6 +187,10 @@ static func _station_from_dict(d: Dictionary, job_registry: Dictionary[String, J
 		var item: ItemData = item_registry.get(item_id as String)
 		if item:
 			station.items_for_sale.append(item)
+	for part_id: Variant in d.get("parts_for_sale", []):
+		var part: ShipPartData = part_registry.get(part_id as String)
+		if part:
+			station.items_for_sale.append(part)
 	return station
 
 static func _load_array(path: String, key: String) -> Array:

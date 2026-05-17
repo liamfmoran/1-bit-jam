@@ -17,6 +17,8 @@ const ENGINE_SFR := Vector2( 12.0, -15.0)
 const ENGINE_SFL := Vector2(-12.0, -15.0)
 const ENGINE_SRR := Vector2( 12.0,  15.0)
 const ENGINE_SRL := Vector2(-12.0,  15.0)
+const ENGINE_LAT_R := Vector2( 12.0,  0.0)
+const ENGINE_LAT_L := Vector2(-12.0,  0.0)
 
 const FLAME_MAIN_W := 5.0
 const FLAME_MAIN_L := 22.0
@@ -33,6 +35,8 @@ const SHIP_SHADER := preload("res://shaders/ship.gdshader")
 @export var min_safe_dist: float = 20.0
 @export var rotation_kp: float = 18000.0
 @export var rotation_kd: float = 3000.0
+@export var lateral_rcs_gain: float = 5.0
+@export var lateral_rcs_max: float = 60000.0
 @export var debug_log: bool = false
 
 # Per-instance variance set in setup() — breaks the symmetric-ring pattern
@@ -42,7 +46,15 @@ var _attack_range_actual: float
 var _log_timer: float = 0.0
 var _prev_state: State = State.PATROL
 var _log_id: String = ""
-const LOG_INTERVAL := 0.5
+const LOG_INTERVAL := 0.2
+
+# Per-frame debug values written by sub-functions, read by the log block.
+var _dbg_engage: String = "COAST"
+var _dbg_desired: float = 0.0
+var _dbg_asp: float = 0.0
+var _dbg_angle_err: float = 0.0
+var _dbg_rcs_level: float = 0.0
+var _dbg_lat_spd: float = 0.0
 
 @onready var flame_rl:  ColorRect = $Flames/FlameRL
 @onready var flame_rr:  ColorRect = $Flames/FlameRR
@@ -50,6 +62,8 @@ const LOG_INTERVAL := 0.5
 @onready var flame_sfr: ColorRect = $Flames/FlameSFR
 @onready var flame_srl: ColorRect = $Flames/FlameSRL
 @onready var flame_srr: ColorRect = $Flames/FlameSRR
+@onready var flame_lat_r: ColorRect = $Flames/FlameLAT_R
+@onready var flame_lat_l: ColorRect = $Flames/FlameLAT_L
 
 var _state: State = State.PATROL
 var _patrol_center: Vector2
@@ -59,6 +73,7 @@ var _player: RigidBody2D
 var _weapon: WeaponComponent
 var _hull_mat: ShaderMaterial
 var _thrusters: ThrusterVisuals
+var _delta: float = 1.0 / 60.0
 
 
 func _ready() -> void:
@@ -89,6 +104,8 @@ func _setup_thruster_visuals() -> void:
 	_thrusters.register(flame_sfr, ENGINE_SFR, Vector2(1, 0),  FLAME_AUX_W,  FLAME_AUX_L,  false)
 	_thrusters.register(flame_srl, ENGINE_SRL, Vector2(-1, 0), FLAME_AUX_W,  FLAME_AUX_L,  false)
 	_thrusters.register(flame_srr, ENGINE_SRR, Vector2(1, 0),  FLAME_AUX_W,  FLAME_AUX_L,  false)
+	_thrusters.register(flame_lat_r, ENGINE_LAT_R, Vector2(1, 0),  FLAME_AUX_W, FLAME_AUX_L, false)
+	_thrusters.register(flame_lat_l, ENGINE_LAT_L, Vector2(-1, 0), FLAME_AUX_W, FLAME_AUX_L, false)
 
 
 func setup(patrol_center: Vector2, patrol_radius: float, player_ship: Node2D, _streamer: Node = null) -> void:
@@ -98,6 +115,10 @@ func setup(patrol_center: Vector2, patrol_radius: float, player_ship: Node2D, _s
 	_state = State.PATROL
 	_prev_state = State.PATROL
 	health = max_health
+	var parts := DataLoader.load_ship_parts()
+	var weapon_slot := find_child("WeaponSlot") as ShipPartSlot
+	if weapon_slot:
+		weapon_slot.equip(parts.get("turret_basic"))
 	_weapon = find_in_slots(WeaponComponent) as WeaponComponent
 	_pick_patrol_target()
 	# Each enemy gets a different trigger distance and overshoot depth so they
@@ -114,6 +135,7 @@ func _pick_patrol_target() -> void:
 func _physics_process(delta: float) -> void:
 	if not is_instance_valid(_player):
 		return
+	_delta = delta
 
 	var spd := linear_velocity.length()
 	var speed_cap := MAX_PATROL_SPEED if _state == State.PATROL else MAX_SPEED
@@ -153,6 +175,9 @@ func _physics_process(delta: float) -> void:
 			elif dist > _attack_range_actual * 1.6 and linear_velocity.dot(to_player.normalized()) < 0.0:
 				_state = State.PURSUE
 
+	if _state != State.PATROL:
+		_apply_lateral_rcs()
+
 	for node: Variant in get_tree().get_nodes_in_group("enemy"):
 		if not is_instance_valid(node) or node == self:
 			continue
@@ -166,18 +191,18 @@ func _physics_process(delta: float) -> void:
 
 	if debug_log:
 		if _state != _prev_state:
-			print("[%s] STATE %s -> %s  dist=%.0f spd=%.0f atk_r=%.0f" % [
+			print("[enemy %s] STATE %s -> %s  dist=%.0f spd=%.0f atk_r=%.0f" % [
 				_log_id, State.keys()[_prev_state], State.keys()[_state],
 				dist, spd, _attack_range_actual])
 		_log_timer += delta
 		if _log_timer >= LOG_INTERVAL:
 			_log_timer = 0.0
-			var force_tags := ""
-			if main_thrust_active: force_tags += " THRUST"
-			if sep_count > 0:      force_tags += " SEP×%d(%.0f)" % [sep_count, sep_force]
-			if force_tags == "":   force_tags = " COAST"
-			print("[%s] %s  dist=%.0f  spd=%.0f  avel=%.2f%s" % [
-				_log_id, State.keys()[_state], dist, spd, angular_velocity, force_tags])
+			var sep_tag := " SEP×%d(%.0f)" % [sep_count, sep_force] if sep_count > 0 else ""
+			print("[enemy %s] %s  d=%.0f  asp=%.1f  des=%.1f  lat=%.1f  ang_err=%.3f  rcs=%.2f  avel=%.2f  spd=%.0f  → %s%s" % [
+				_log_id, State.keys()[_state],
+				dist, _dbg_asp, _dbg_desired, _dbg_lat_spd,
+				_dbg_angle_err, _dbg_rcs_level, angular_velocity, spd,
+				_dbg_engage, sep_tag])
 
 	_prev_state = _state
 
@@ -190,6 +215,26 @@ func _patrol_behavior() -> void:
 	_thrust_toward(_patrol_target)
 
 
+func _apply_lateral_rcs() -> void:
+	var lat_spd := transform.x.dot(linear_velocity)
+	if debug_log:
+		_dbg_lat_spd = lat_spd
+	var f := minf(absf(lat_spd) * lateral_rcs_gain, lateral_rcs_max)
+	if f < 1.0:
+		_thrusters.set_target(flame_lat_r, 0.0)
+		_thrusters.set_target(flame_lat_l, 0.0)
+		return
+	var ratio := f / lateral_rcs_max
+	if lat_spd > 0.0:
+		apply_force(-transform.x * f, ENGINE_LAT_R.rotated(rotation))
+		_thrusters.set_target(flame_lat_r, ratio)
+		_thrusters.set_target(flame_lat_l, 0.0)
+	else:
+		apply_force(transform.x * f, ENGINE_LAT_L.rotated(rotation))
+		_thrusters.set_target(flame_lat_r, 0.0)
+		_thrusters.set_target(flame_lat_l, ratio)
+
+
 # Applies RCS forces from actual thruster positions and sets flame visuals.
 # Paired thrusters cancel translation so only torque is produced.
 func _steer_toward(target_pos: Vector2) -> void:
@@ -197,6 +242,9 @@ func _steer_toward(target_pos: Vector2) -> void:
 	var angle_err := angle_difference(rotation, desired_angle)
 	var torque_cmd := angle_err * rotation_kp - angular_velocity * rotation_kd
 	var rcs_level := clampf(absf(torque_cmd) / (PI * rotation_kp), 0.0, 1.0)
+	if debug_log:
+		_dbg_angle_err = angle_err
+		_dbg_rcs_level = rcs_level
 	if torque_cmd > 0.0:
 		# Clockwise: SFL (+X) and SRR (-X)
 		apply_force(transform.x * RCS_FORCE * rcs_level, transform.basis_xform(ENGINE_SFL))
@@ -251,32 +299,44 @@ func _thrust_toward(target_pos: Vector2) -> bool:
 
 
 # Hold a comfortable engagement distance: close enough to fire, clear of avoidance.
-# Uses a proportional approach so the ship slows naturally as it reaches the target.
 # Returns true when main engines fired.
 func _thrust_to_engagement() -> bool:
 	var to_player := _player.global_position - global_position
 	var dist := to_player.length()
-	# Stay well outside min_safe_dist so avoidance never triggers during combat.
-	var target_dist := maxf(_attack_range_actual * 0.55, min_safe_dist * 1.8)
+	var target_dist := maxf(_attack_range_actual * 0.7, min_safe_dist * 2.5)
 	var approach_speed := linear_velocity.dot(to_player.normalized())
+	if debug_log:
+		_dbg_asp = approach_speed
+		_dbg_engage = "COAST"
 
-	if dist > target_dist + 20.0:
-		# Proportional throttle: scale with speed deficit to avoid on/off oscillation.
-		var desired := clampf((dist - target_dist) * 0.4, 30.0, MAX_SPEED * 0.4)
-		var deficit := desired - approach_speed
-		if deficit > 0.0:
-			var tscale := clampf(deficit / 600.0, 0.0, 1.0)
-			apply_force(-transform.y * thrust_force * tscale * 0.5, transform.basis_xform(ENGINE_RL))
-			apply_force(-transform.y * thrust_force * tscale * 0.5, transform.basis_xform(ENGINE_RR))
-			_thrusters.set_target(flame_rl, tscale)
-			_thrusters.set_target(flame_rr, tscale)
-			return tscale > 0.05
-		if approach_speed > desired + 80.0:
-			apply_central_force(-linear_velocity.normalized() * thrust_force * 0.2)
-	elif dist < target_dist - 20.0:
-		# Too close: brake if still approaching the player.
-		if approach_speed > 0.0:
-			apply_central_force(-linear_velocity.normalized() * thrust_force * 0.25)
+	# Desired approach speed: ramps to 0 as dist reaches target_dist.
+	var desired := 0.0
+	if dist > target_dist:
+		desired = clampf((dist - target_dist) * 0.25, 0.0, 180.0)
+	if debug_log:
+		_dbg_desired = desired
+
+	var err := approach_speed - desired
+	if err > 1.0:
+		# Exact impulse to reach desired in one frame — no overshoot, no oscillation.
+		var f := clampf(err / _delta, 0.0, thrust_force * 0.5)
+		apply_central_force(-to_player.normalized() * f)
+		if debug_log:
+			_dbg_engage = "BRAKE(%.0fN)" % f
+		_thrusters.set_target(flame_rl, 0.0)
+		_thrusters.set_target(flame_rr, 0.0)
+		return false
+	elif desired > 10.0 and approach_speed < desired - 10.0:
+		# Exact impulse to close the deficit in one frame.
+		var f := clampf((desired - approach_speed) / _delta, 0.0, thrust_force * 0.4)
+		var tscale := f / (thrust_force * 0.4)
+		apply_force(-transform.y * f * 0.5, transform.basis_xform(ENGINE_RL))
+		apply_force(-transform.y * f * 0.5, transform.basis_xform(ENGINE_RR))
+		if debug_log:
+			_dbg_engage = "THRUST(%.0fN)" % f
+		_thrusters.set_target(flame_rl, tscale)
+		_thrusters.set_target(flame_rr, tscale)
+		return tscale > 0.05
 
 	_thrusters.set_target(flame_rl, 0.0)
 	_thrusters.set_target(flame_rr, 0.0)

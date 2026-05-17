@@ -8,7 +8,7 @@ extends BaseShip
 @export var angular_stab_gain: float = 10.0
 @export var gimbal_max_angle: float = 20.0
 @export var gimbal_speed: float = 8.0
-@export var lateral_rcs_gain: float = 5.0
+@export var lateral_rcs_gain: float = 200.0
 @export var lateral_rcs_max: float = 100000.0
 @export var steering_ratio: float = 0.35
 
@@ -46,6 +46,11 @@ var _hull_mat: ShaderMaterial
 var _thrusters: ThrusterVisuals
 var _docked: bool
 
+var _weapon_component: WeaponComponent
+var _engine_component: EngineComponent
+var _weapon_dir := Vector2.UP
+var _fire_held := false
+
 
 func _ready() -> void:
 	super._ready()
@@ -58,11 +63,81 @@ func _ready() -> void:
 	_hull_mat = mat
 	%Health.value = GameState.hp
 	_setup_thruster_visuals()
+	_equip_default_parts()
+	GameState.equipped_parts_changed.connect(_on_equipped_parts_changed)
+	_on_equipped_parts_changed()
 
 
 func _process(delta: float) -> void:
 	_hull_mat.set_shader_parameter("ship_rotation", rotation)
 	_thrusters.tick(delta)
+
+	var mouse_world := get_global_mouse_position()
+	if mouse_world.distance_squared_to(global_position) > 1.0:
+		_weapon_dir = (mouse_world - global_position).normalized()
+	if _fire_held and _weapon_component != null:
+		_weapon_component.fire(_weapon_dir)
+
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			var hovered := get_viewport().gui_get_hovered_control()
+			_fire_held = not (hovered is BaseButton)
+		else:
+			_fire_held = false
+
+
+func _equip_default_parts() -> void:
+	var parts := DataLoader.load_ship_parts()
+	_create_slot(&"engine", parts.get("engine_basic"))
+	_create_slot(&"hull",   parts.get("hull_basic"))
+	_create_slot(&"shield", parts.get("shield_basic"))
+
+
+func _apply_equipped_weapon() -> void:
+	for child in get_children():
+		if child is ShipPartSlot and child.slot_id == &"weapon":
+			child.queue_free()
+	_weapon_component = null
+	var part := GameState.equipped_parts.get(&"weapon") as ShipPartData
+	if part is WeaponPartData:
+		var slot := ShipPartSlot.new()
+		slot.slot_id = &"weapon"
+		add_child(slot)
+		slot.equip(part)
+		for c in slot.get_children():
+			if c is WeaponComponent:
+				_weapon_component = c as WeaponComponent
+				break
+
+
+func _on_equipped_parts_changed() -> void:
+	_apply_equipped_weapon()
+	_apply_equipped_slot(&"engine")
+	_apply_equipped_slot(&"hull")
+	_apply_equipped_slot(&"shield")
+	_engine_component = find_in_slots(EngineComponent) as EngineComponent
+
+
+func _apply_equipped_slot(sid: StringName) -> void:
+	var part := GameState.equipped_parts.get(sid) as ShipPartData
+	if part == null:
+		return
+	for child in get_children():
+		if child is ShipPartSlot and child.slot_id == sid:
+			child.equip(part)
+			return
+	_create_slot(sid, part)
+
+
+func _create_slot(sid: StringName, part: ShipPartData) -> void:
+	if part == null:
+		return
+	var slot := ShipPartSlot.new()
+	slot.slot_id = sid
+	add_child(slot)
+	slot.equip(part)
 
 
 func _setup_thruster_visuals() -> void:
@@ -96,24 +171,33 @@ func _physics_process(delta: float) -> void:
 	elif GameState._is_ship_docked and Input.is_action_pressed('thrust_forward'):
 		GameState.undock()
 
-
 	if braking:
 		_brake(forward_dir, turn_input)
 		_update_flames_braking(forward_dir, turn_input)
 		return
 
+	var boost_req := Input.is_action_pressed("boost")
+	var thrust_mult := 1.0
+	if _engine_component != null:
+		_engine_component.tick(delta, boost_req)
+		thrust_mult = _engine_component.power_multiplier
+		if boost_req and _engine_component.has_boost() and _engine_component.boost_charge > 0.0:
+			thrust_mult *= 2.0
+
 	var steer := transform.x * sin(deg_to_rad(gimbal_angle)) * steering_ratio
 
 	if thrusting_forward:
-		apply_central_force(forward_dir * rear_thrust_force)
-		apply_force(steer * rear_thrust_force, Vector2(0.0, 40.0).rotated(rotation))
+		apply_central_force(forward_dir * rear_thrust_force * thrust_mult)
+		apply_force(steer * rear_thrust_force * thrust_mult, Vector2(0.0, 40.0).rotated(rotation))
 
 	if thrusting_reverse:
-		apply_central_force(-forward_dir * front_thrust_force)
-		apply_force(-steer * front_thrust_force, Vector2(0.0, -40.0).rotated(rotation))
+		apply_central_force(-forward_dir * front_thrust_force * thrust_mult)
+		apply_force(-steer * front_thrust_force * thrust_mult, Vector2(0.0, -40.0).rotated(rotation))
 
-	if thrusting_forward or thrusting_reverse:
+	if thrusting_forward:
 		_apply_lateral_rcs()
+
+	var straightening: bool = thrusting_forward and abs(turn_input) < 0.1
 
 	var fire_left := false
 	var fire_right := false
@@ -138,9 +222,8 @@ func _physics_process(delta: float) -> void:
 		apply_force(forward_dir * stab_f, ENGINE_SFL.rotated(rotation))
 		apply_force(-forward_dir * stab_f, ENGINE_SRR.rotated(rotation))
 
-	_update_flames(thrusting_forward, thrusting_reverse, fire_left, fire_right, stab_f / stabilizer_force)
+	_update_flames(thrusting_forward, thrusting_reverse, fire_left, fire_right, stab_f / stabilizer_force, straightening)
 
-	
 
 func _apply_lateral_rcs() -> void:
 	var lat_spd := transform.x.dot(linear_velocity)
@@ -182,7 +265,7 @@ func _brake(forward_dir: Vector2, turn_input: float) -> void:
 		angular_velocity = 0.0
 
 
-func _update_flames(forward: bool, reverse: bool, fire_left: bool, fire_right: bool, stab_ratio: float) -> void:
+func _update_flames(forward: bool, reverse: bool, fire_left: bool, fire_right: bool, stab_ratio: float, straightening: bool) -> void:
 	_thrusters.set_target(flame_rl,    1.0 if forward               else 0.0)
 	_thrusters.set_target(flame_rr,    1.0 if forward               else 0.0)
 	_thrusters.set_target(flame_fl,    1.0 if reverse               else 0.0)
@@ -192,7 +275,7 @@ func _update_flames(forward: bool, reverse: bool, fire_left: bool, fire_right: b
 	_thrusters.set_target(flame_sfl,   stab_ratio if fire_right     else 0.0)
 	_thrusters.set_target(flame_srr,   stab_ratio if fire_right     else 0.0)
 	var lat_spd := transform.x.dot(linear_velocity)
-	if forward or reverse:
+	if straightening:
 		var lat_ratio := minf(absf(lat_spd) * lateral_rcs_gain, lateral_rcs_max) / lateral_rcs_max
 		_thrusters.set_target(flame_lat_r, lat_ratio if lat_spd > 0.1  else 0.0)
 		_thrusters.set_target(flame_lat_l, lat_ratio if lat_spd < -0.1 else 0.0)

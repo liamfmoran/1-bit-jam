@@ -77,7 +77,7 @@ func _show_menus() -> void:
 	_inventory_instance.set_anchors_preset(Control.PRESET_FULL_RECT)
 	right_panel.add_child(_inventory_instance)
 	if _station:
-		_inventory_instance.set_parts(_station.items_for_sale)
+		_inventory_instance.setup_station(_station)
 
 
 func _hide_menus() -> void:
