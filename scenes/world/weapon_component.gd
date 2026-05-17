@@ -35,4 +35,11 @@ func fire(direction: Vector2) -> void:
 	var bullet := BULLET_SCENE.instantiate()
 	get_tree().current_scene.add_child(bullet)
 	bullet.global_position = global_position
-	bullet.launch(direction, bullet_speed, damage, team)
+	var shooter_vel := Vector2.ZERO
+	var node: Node = get_parent()
+	while node != null:
+		if node is RigidBody2D:
+			shooter_vel = (node as RigidBody2D).linear_velocity
+			break
+		node = node.get_parent()
+	bullet.launch(direction, bullet_speed, damage, team, shooter_vel)

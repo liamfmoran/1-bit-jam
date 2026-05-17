@@ -6,8 +6,8 @@ var _lifetime: float = 3.0
 var _team: StringName = &"enemy"
 
 
-func launch(direction: Vector2, speed: float, dmg: float, shooter_team: StringName = &"enemy") -> void:
-	_velocity = direction * speed
+func launch(direction: Vector2, speed: float, dmg: float, shooter_team: StringName = &"enemy", inherited_velocity: Vector2 = Vector2.ZERO) -> void:
+	_velocity = direction * speed + inherited_velocity
 	_damage = dmg
 	_team = shooter_team
 	rotation = direction.angle() + PI / 2.0

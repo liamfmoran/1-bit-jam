@@ -3,31 +3,77 @@
 		{
 			"id": "example_ship_part_a",
 			"display_name": "Example Ship Part A",
-			"slot_type": "thruster",
-			"stats": {},
+			"icon": "",
+			"slot_type": "engine",
+			"stats": {
+				"power_multiplier": 1.0,
+				"boost_capacity": 0.0
+			},
 			"mass": 1.0,
 			"cost": 50
 		},
 		{
 			"id": "example_ship_part_b",
 			"display_name": "Example Ship Part B",
+			"icon": "",
 			"slot_type": "shield",
-			"stats": {},
+			"stats": {
+				"max_shield": 30.0,
+				"recharge_delay": 10.0,
+				"recharge_time": 2.0
+			},
 			"mass": 2.0,
 			"cost": 100
 		},
 		{
 			"id": "turret_basic",
 			"display_name": "Basic Turret",
+			"icon": "",
 			"slot_type": "weapon",
 			"stats": {
 				"bullet_speed": 520.0,
 				"damage": 15.0,
 				"fire_rate": 1.5,
-				"range": 320.0
+				"range": 550.0
 			},
 			"mass": 0.1,
 			"cost": 200
+		},
+		{
+			"id": "engine_basic",
+			"display_name": "Basic Engine",
+			"icon": "",
+			"slot_type": "engine",
+			"stats": {
+				"power_multiplier": 1.2,
+				"boost_capacity": 1.0
+			},
+			"mass": 2.0,
+			"cost": 150
+		},
+		{
+			"id": "hull_basic",
+			"display_name": "Basic Hull Plating",
+			"icon": "",
+			"slot_type": "hull",
+			"stats": {
+				"damage_negation": 5.0
+			},
+			"mass": 3.0,
+			"cost": 100
+		},
+		{
+			"id": "shield_basic",
+			"display_name": "Basic Shield",
+			"icon": "",
+			"slot_type": "shield",
+			"stats": {
+				"max_shield": 50.0,
+				"recharge_delay": 10.0,
+				"recharge_time": 2.0
+			},
+			"mass": 1.5,
+			"cost": 150
 		}
 	]
 }

@@ -18,7 +18,7 @@ func _ready() -> void:
 	var job_station_refs: Dictionary = {}
 	jobs = DataLoader.load_jobs(items, job_station_refs)
 	zones = DataLoader.load_zones()
-	stations = DataLoader.load_stations(jobs, items)
+	stations = DataLoader.load_stations(jobs, items, ship_parts)
 	for station: StationData in stations.values():
 		station.position = _find_station_position(station.id)
 	DataLoader.resolve_job_stations(jobs, stations, job_station_refs)

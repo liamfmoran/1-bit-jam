@@ -8,6 +8,12 @@
 			],
 			"items_for_sale": [
 				"test_item_1"
+			],
+			"parts_for_sale": [
+				"engine_basic",
+				"hull_basic",
+				"shield_basic",
+				"turret_basic"
 			]
 		},
 		{
