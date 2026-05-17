@@ -12,6 +12,8 @@ func _physics_process(_delta: float) -> void:
 		return
 	material.set_shader_parameter("ship_position", _ship.global_position)
 	material.set_shader_parameter("ship_velocity", (_ship as RigidBody2D).linear_velocity if _ship is RigidBody2D else Vector2.ZERO)
+	var canvas_pos := get_viewport().get_canvas_transform() * _ship.global_position
+	material.set_shader_parameter("player_screen_uv", canvas_pos / get_viewport().get_visible_rect().size)
 
 	var cam := get_viewport().get_camera_2d()
 	if cam:

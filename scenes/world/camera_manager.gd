@@ -1,4 +1,7 @@
+class_name CameraManager
 extends Camera2D
+
+enum State { FLIGHT, DOCKING, UNDOCKING }
 
 @export var zoom_min: float = 0.8
 @export var zoom_max: float = 1.5
@@ -9,77 +12,77 @@ extends Camera2D
 @export var dock_zoom_duration: float = 1.4
 @export var undock_zoom_duration: float = 1.0
 @export var rotation_smoothing: float = 6.0
+@export var flight_screen_offset: Vector2 = Vector2(0, 200)
 
-var _ship: Node2D
-var _zoom_tween: Tween
-var _position_tween: Tween
+var _player: Node2D
+var _dock_target: Node2D
+var _state: State = State.FLIGHT
+var _dock_tween: Tween
 var _current_rotation: float = 0.0
-var _dock_zoom_weight: float = 0.0
-var _position_offset_weight := 1.0
-
-
-const SHIP_OFFSET: Vector2 = Vector2(0, 200)
+var _dock_weight: float = 0.0
+var _zoom_start: float = 1.5
 
 
 func _ready() -> void:
 	ignore_rotation = false
+	position_smoothing_enabled = false
+	rotation_smoothing_enabled = false
+	drag_horizontal_enabled = false
+	drag_vertical_enabled = false
 	zoom = Vector2(zoom_max, zoom_max)
-	_ship = get_tree().get_first_node_in_group("player") as Node2D
-	GameState.docked.connect(_on_docked)
-	GameState.undocked.connect(_on_undocked)
+	_player = get_tree().get_first_node_in_group("player") as Node2D
+	GameState.undocked.connect(start_undocking)
 
 
 func _physics_process(delta: float) -> void:
-	var ship := _ship
-	if not ship:
+	if not is_instance_valid(_player):
 		return
 
-	var offset := SHIP_OFFSET.rotated(ship.global_rotation) * _position_offset_weight
-	global_position = ship.global_position - offset
+	var ship_cam := _player.global_position - (flight_screen_offset / zoom.x).rotated(_current_rotation)
+	var new_cam_pos: Vector2
+	if _state != State.FLIGHT and _dock_target and is_instance_valid(_dock_target):
+		new_cam_pos = ship_cam.lerp(_dock_target.global_position, _dock_weight)
+	else:
+		new_cam_pos = ship_cam
 
-	_current_rotation = lerp_angle(_current_rotation, ship.global_rotation, rotation_smoothing * delta)
+	global_position = new_cam_pos
+
+	_current_rotation = lerp_angle(_current_rotation, _player.global_rotation, rotation_smoothing * delta)
 	global_rotation = _current_rotation
 
-	var speed := (ship as RigidBody2D).linear_velocity.length() if ship is RigidBody2D else 0.0
-	var base_zoom_target := clampf(zoom_max - speed * zoom_speed_factor, zoom_min, zoom_max)
-	var dock_zoom_factor := lerpf(1.0, _get_dock_zoom_multiplier(), _dock_zoom_weight)
-	var target_zoom := clampf(base_zoom_target * dock_zoom_factor, zoom_min, dock_zoom)
+	match _state:
+		State.DOCKING:
+			var z := lerpf(_zoom_start, dock_zoom, _dock_weight)
+			zoom = Vector2(z, z)
+		State.FLIGHT, State.UNDOCKING:
+			var speed := (_player as RigidBody2D).linear_velocity.length() if _player is RigidBody2D else 0.0
+			var flight_zoom := clampf(zoom_max - speed * zoom_speed_factor, zoom_min, zoom_max)
+			var smoothing := zoom_out_smoothing if flight_zoom < zoom.x else zoom_smoothing
+			zoom = zoom.lerp(Vector2(flight_zoom, flight_zoom), smoothing * delta)
 
-	var smoothing := zoom_out_smoothing if target_zoom < zoom.x else zoom_smoothing
-	zoom = zoom.lerp(Vector2(target_zoom, target_zoom), smoothing * delta)
+
+func start_docking(approach_duration: float, dock_target: Node2D) -> void:
+	_dock_target = dock_target
+	if _dock_tween:
+		_dock_tween.kill()
+	_state = State.DOCKING
+	_zoom_start = zoom.x
+	_dock_weight = 0.0
+	_dock_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+	_dock_tween.tween_property(self, "_dock_weight", 1.0, approach_duration + dock_zoom_duration)
+	_dock_tween.finished.connect(func() -> void: _dock_tween = null)
 
 
-func _on_docked() -> void:
-	if _position_tween:
-		_position_tween.kill()
-	_position_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
-	_position_tween.tween_property(self, "_position_offset_weight", 0.0, dock_zoom_duration)
-
-	if _zoom_tween:
-		_zoom_tween.kill()
-	_zoom_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
-	_zoom_tween.tween_property(self, "_dock_zoom_weight", 1.0, dock_zoom_duration)
-	_zoom_tween.finished.connect(func() -> void:
-		_zoom_tween = null
+func start_undocking() -> void:
+	if _state == State.FLIGHT or _state == State.UNDOCKING:
+		return
+	if _dock_tween:
+		_dock_tween.kill()
+	_state = State.UNDOCKING
+	_dock_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+	_dock_tween.tween_property(self, "_dock_weight", 0.0, undock_zoom_duration)
+	_dock_tween.finished.connect(func() -> void:
+		_dock_tween = null
+		_state = State.FLIGHT
+		_dock_target = null
 	)
-
-
-func _on_undocked() -> void:
-	if _position_tween:
-		_position_tween.kill()
-	_position_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
-	_position_tween.tween_property(self, "_position_offset_weight", 1.0, undock_zoom_duration)
-
-	if _zoom_tween:
-		_zoom_tween.kill()
-	_zoom_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
-	_zoom_tween.tween_property(self, "_dock_zoom_weight", 0.0, undock_zoom_duration)
-	_zoom_tween.finished.connect(func() -> void:
-		_zoom_tween = null
-	)
-
-
-func _get_dock_zoom_multiplier() -> float:
-	if is_zero_approx(zoom_max):
-		return 1.0
-	return dock_zoom / zoom_max

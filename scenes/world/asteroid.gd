@@ -6,7 +6,7 @@ var radius: float = 16.0
 var _ship: Node2D
 var _mat: ShaderMaterial
 
-const DENSITY: float = 0.05
+const DENSITY: float = 0.0125
 const SPIN_RESPONSE: float = 0.3
 const ASTEROID_SHADER := preload("res://shaders/asteroid.gdshader")
 

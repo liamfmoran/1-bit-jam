@@ -6,6 +6,7 @@ extends Node2D
 @onready var detection_zone: Area2D = $DetectionZone
 
 const ANIM_DURATION := 0.4
+const APPROACH_DURATION := 1.0
 const JOBS_MENU: PackedScene = preload("res://scenes/ui/jobs_menu.tscn")
 const INVENTORY_MENU: PackedScene = preload("res://scenes/ui/inventory_menu.tscn")
 
@@ -14,6 +15,7 @@ var _docked_ship: RigidBody2D
 var _jobs_instance: Control
 var _inventory_instance: Control
 var _station: StationData
+var _camera: CameraManager
 
 
 func setup(station: StationData) -> void:
@@ -34,12 +36,15 @@ func _on_body_entered(body: Node2D) -> void:
 	if _docked_ship or not body.is_in_group("player"):
 		return
 	_docked_ship = body
+	if not _camera:
+		_camera = get_viewport().get_camera_2d() as CameraManager
+	_camera.start_docking(APPROACH_DURATION, detection_zone)
 
 	body.set_deferred("freeze", true)
 	var tween_pos : Tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_LINEAR)
-	tween_pos.tween_property(body, "global_position", detection_zone.global_position, 1.0)
+	tween_pos.tween_property(body, "global_position", detection_zone.global_position, APPROACH_DURATION)
 	var tween_rot : Tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_LINEAR)
-	tween_rot.tween_property(body, "global_rotation", detection_zone.global_rotation, 1.0)
+	tween_rot.tween_property(body, "global_rotation", detection_zone.global_rotation, APPROACH_DURATION)
 	tween_pos.finished.connect(func():
 		body.set_deferred("freeze", false)
 		if _station:

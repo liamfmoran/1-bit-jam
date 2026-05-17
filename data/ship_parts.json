@@ -19,7 +19,7 @@
 		{
 			"id": "turret_basic",
 			"display_name": "Basic Turret",
-			"slot_type": "turret",
+			"slot_type": "weapon",
 			"stats": {
 				"bullet_speed": 520.0,
 				"damage": 15.0,

@@ -55,7 +55,7 @@ static func _ship_part_from_dict(d: Dictionary) -> ShipPartData:
 	var slot_str: String = d.get("slot_type", "")
 	var part: ShipPartData
 	match slot_str:
-		"turret":
+		"weapon":
 			var wp := WeaponPartData.new()
 			var stats: Dictionary = d.get("stats", {})
 			wp.fire_rate    = float(stats.get("fire_rate",    wp.fire_rate))

@@ -36,8 +36,8 @@ color = Color(0.5, 0.5, 0.5, 1)
 
 [node name="FlameSRR" type="ColorRect" parent="Flames"]
 
-[node name="TurretSlot" type="Node2D" parent="."]
+[node name="WeaponSlot" type="Node2D" parent="."]
 position = Vector2(0, -20)
 script = ExtResource("2_p5t3r")
-slot_type = &"turret"
-slot_id = &"turret_main"
+slot_type = &"weapon"
+slot_id = &"weapon_main"
