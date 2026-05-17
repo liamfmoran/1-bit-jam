@@ -3,16 +3,16 @@ extends Camera2D
 
 enum State { FLIGHT, DOCKING, UNDOCKING }
 
-@export var zoom_min: float = 0.8
-@export var zoom_max: float = 1.5
-@export var zoom_speed_factor: float = 0.002
+@export var zoom_min: float = 0.6
+@export var zoom_max: float = 1.125
+@export var zoom_speed_factor: float = 0.0015
 @export var zoom_smoothing: float = 3.0
 @export var zoom_out_smoothing: float = 5.5
-@export var dock_zoom: float = 1.5
+@export var dock_zoom: float = 1.125
 @export var dock_zoom_duration: float = 1.4
 @export var undock_zoom_duration: float = 1.0
 @export var rotation_smoothing: float = 6.0
-@export var flight_screen_offset: Vector2 = Vector2(0, 200)
+@export var flight_screen_offset: Vector2 = Vector2(0, 150)
 
 var _player: Node2D
 var _dock_target: Node2D
@@ -20,7 +20,7 @@ var _state: State = State.FLIGHT
 var _dock_tween: Tween
 var _current_rotation: float = 0.0
 var _dock_weight: float = 0.0
-var _zoom_start: float = 1.5
+var _zoom_start: float = 1.125
 
 
 func _ready() -> void:

@@ -8,7 +8,7 @@
 layout_mode = 3
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 56.0
+offset_bottom = 42.0
 grow_horizontal = 2
 mouse_filter = 2
 script = ExtResource("1_jm7td")
@@ -22,7 +22,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="CompassPanel" type="Panel" parent="VBoxContainer" unique_id=1259881106]
-custom_minimum_size = Vector2(400, 20)
+custom_minimum_size = Vector2(300, 15)
 layout_mode = 2
 size_flags_horizontal = 4
 mouse_filter = 2
@@ -39,10 +39,10 @@ script = ExtResource("2_7k3n9")
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/CompassPanel" unique_id=698304478]
 layout_mode = 0
-offset_left = -5.0
-offset_top = 5.0
-offset_right = 404.6
-offset_bottom = 21.0
+offset_left = -3.75
+offset_top = 3.75
+offset_right = 303.45
+offset_bottom = 15.75
 texture = ExtResource("3_bo48s")
 expand_mode = 1
 

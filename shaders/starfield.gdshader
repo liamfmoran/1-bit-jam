@@ -89,6 +89,6 @@ void fragment() {
 	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 60.0, 1.44, 0.06, 0.125,  8.6));
 	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 57.0, 1.56, 0.06, 0.170,  9.3));
 	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 53.0, 1.69, 0.06, 0.230, 11.1));
-	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 50.0, 1.80, 0.06, 0.300, 12.4));
+	brightness = max(brightness, star_layer(FRAGCOORD.xy, player_screen_pos, 50.0, 1.30, 0.06, 0.300, 12.4));
 	COLOR = vec4(1.0, 1.0, 1.0, brightness);
 }

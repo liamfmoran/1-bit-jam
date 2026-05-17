@@ -9,9 +9,9 @@ bg_color = Color(0, 0, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nmkv6"]
 
 [node name="Item" type="Button" unique_id=815075186]
-custom_minimum_size = Vector2(200, 25)
-offset_right = 200.0
-offset_bottom = 25.0
+custom_minimum_size = Vector2(150, 19)
+offset_right = 150.0
+offset_bottom = 19.0
 theme_override_styles/normal = SubResource("StyleBoxFlat_cwagn")
 theme_override_styles/hover = SubResource("StyleBoxFlat_nmkv6")
 toggle_mode = true
@@ -19,7 +19,7 @@ alignment = 0
 script = ExtResource("1_cwagn")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=120323933]
-custom_minimum_size = Vector2(200, 25)
+custom_minimum_size = Vector2(150, 19)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,17 +30,17 @@ theme_override_constants/separation = 10
 
 [node name="Icon" type="TextureRect" parent="HBoxContainer" unique_id=1724796206]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(50, 0)
+custom_minimum_size = Vector2(37, 0)
 layout_mode = 2
 texture = ExtResource("2_cwagn")
 expand_mode = 2
 
 [node name="Name" type="Label" parent="HBoxContainer" unique_id=439096452]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 size_flags_vertical = 6
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 12
 text = "TEST TEST"
 horizontal_alignment = 1
 
@@ -48,6 +48,6 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 6
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 9
 text = "20 c"
 horizontal_alignment = 1

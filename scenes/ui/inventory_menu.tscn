@@ -71,7 +71,7 @@ layout_mode = 2
 
 [node name="Credits" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1422042077]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.2231029, 0.2231029, 0.22310287, 1)
 text = "Gold:"
